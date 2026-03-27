@@ -3,12 +3,14 @@ export type Class = {
     number: number,
     letter: string,
     teacher_id: number,
-    school_id: number
+    school_id: number,
+    created_at: string
 }
 
 export type School = {
     school_id: number,
-    name: string
+    name: string,
+    created_at: string
 }
 
 export type User = {
@@ -18,7 +20,8 @@ export type User = {
     surname: string,
     role: "teacher" | "student" | "admin",
     school_id: number,
-    class_id: number
+    class_id: number,
+    created_at: string
 }
 
 export type Training = {
@@ -28,17 +31,18 @@ export type Training = {
     tasks_amount: number,
     time: number,
     operations: string[],
-    range_min: number,
-    range_max: number,
     student_id: number,
-    teacher_id: number
+    teacher_id: number,
+    created_at: string
 }
 
 export type Task = {
     task_id: number,
-    question: string,
-    right_answer: number,
-    training_id: number
+    first_num: number,
+    second_num: number,
+    operation: string,
+    training_id: number,
+    created_at: string
 }
 
 export type Result = {
@@ -47,7 +51,8 @@ export type Result = {
     accuracy: number,
     average_time: number,
     training_id: number,
-    user_id: number
+    user_id: number,
+    created_at: string
 }
 
 export type Answer = {
@@ -55,5 +60,7 @@ export type Answer = {
     answer: number,
     is_correct: boolean,
     time_spent: number,
-    result_id: number
+    result_id: number,
+    task_id: number,
+    created_at: string
 }
