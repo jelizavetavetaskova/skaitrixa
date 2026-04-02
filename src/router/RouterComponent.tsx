@@ -2,6 +2,7 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute.tsx";
 import type {User} from "../shared/types/database.ts";
 import LoginPage from "../pages/LoginPage.tsx";
+import RegisterPage from "../pages/RegisterPage.tsx";
 
 interface RouterProps {
     user: User | null;
@@ -14,7 +15,7 @@ const RouterComponent = ({user}: RouterProps) => {
             <Routes>
                 <Route path="/" element={<h1>Galvenā lapa</h1>} />
                 <Route path="/login" element={<LoginPage />} />
-                <Route path="/register" element={<h1>Reģistrācija</h1>} />
+                <Route path="/register" element={<RegisterPage />} />
 
                 {/* SKOLĒNS */}
                 <Route path="/dashboard" element={

@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {useAuth} from "../features/auth/useAuth.ts";
+import {useAuth} from "../features/auth/hooks/useAuth.ts";
 import type {AuthError} from "@supabase/supabase-js";
 import {useNavigate} from "react-router-dom";
 

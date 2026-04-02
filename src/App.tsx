@@ -1,5 +1,5 @@
 import RouterComponent from "./router/RouterComponent.tsx";
-import {useAuth} from "./features/auth/useAuth.ts";
+import {useAuth} from "./features/auth/hooks/useAuth.ts";
 
 const App = () => {
   const {user, loading} = useAuth();
