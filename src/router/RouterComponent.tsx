@@ -3,6 +3,7 @@ import ProtectedRoute from "./ProtectedRoute.tsx";
 import type {User} from "../shared/types/database.ts";
 import LoginPage from "../pages/LoginPage.tsx";
 import RegisterPage from "../pages/RegisterPage.tsx";
+import Dashboard from "../pages/Dashboard.tsx";
 
 interface RouterProps {
     user: User | null;
@@ -20,7 +21,7 @@ const RouterComponent = ({user}: RouterProps) => {
                 {/* SKOLĒNS */}
                 <Route path="/dashboard" element={
                     <ProtectedRoute user={user} roles={["student"]}>
-                        <h1>Dashboard</h1>
+                        <Dashboard />
                     </ProtectedRoute>
                 } />
 

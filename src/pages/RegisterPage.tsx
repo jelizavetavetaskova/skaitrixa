@@ -13,6 +13,7 @@ const RegisterPage = () => {
 
     const [error, setError] = useState("");
 
+
     const navigate = useNavigate();
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -22,10 +23,16 @@ const RegisterPage = () => {
         })
     }
 
-    const addUser = async () => {
+    const addUser = async (userId: string) => {
         const {error} = await supabase
             .from("users")
-            .insert({name: formData.name, surname: formData.surname, email: formData.email, role: "student"});
+            .insert({
+                user_id: userId,
+                name: formData.name,
+                surname: formData.surname,
+                email: formData.email,
+                role: "student"
+            });
 
         if (error) {
             setError(error.message);
@@ -43,13 +50,13 @@ const RegisterPage = () => {
             return;
         }
 
-        const {error} = await supabase.auth.signUp({email: formData.email, password: formData.password});
+        const {data, error} = await supabase.auth.signUp({email: formData.email, password: formData.password});
         if (error) {
             setError(error.message);
             return;
         }
 
-        await addUser();
+        if (data.user) await addUser(data.user.id);
     }
 
     return (

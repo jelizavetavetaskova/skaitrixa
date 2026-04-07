@@ -1,22 +1,25 @@
 import {useEffect, useState} from "react";
 import {supabase} from "../../../lib/supabase.ts";
+import type {User} from "../../../shared/types/database.ts";
 
 export const useAuth = () => {
-    const [user, setUser] = useState<any|null>(null);
     const [loading, setLoading] = useState(true);
+    const [user, setUser] = useState<User|null>(null);
 
     useEffect(() => {
-        const checkAuth = async () => {
-            setLoading(true);
-            const {data: { user }} = await supabase.auth.getUser();
-            setUser(user);
+        const fetchUser = async (id: string) => {
+            const {data} = await supabase.from("users").select("*").eq("user_id", id).single();
+            setUser(data);
             setLoading(false);
         }
-        checkAuth();
 
         const {data: {subscription}} = supabase.auth.onAuthStateChange((_event, session) => {
-            setUser(session?.user ?? null);
-            setLoading(false);
+            if (session?.user) {
+                fetchUser(session.user.id);
+            } else {
+                setUser(null);
+                setLoading(false);
+            }
         });
 
         return () => subscription.unsubscribe();
