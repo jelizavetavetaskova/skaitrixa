@@ -46,7 +46,7 @@ const Dashboard = ({user}: DashboardProps) => {
                 .eq("user_id", user?.user_id)
                 .order("score", {ascending: false})
                 .limit(1)
-                .single();
+                .maybeSingle();
 
             if (res.error) {
                 setError(res.error.message);
@@ -56,19 +56,13 @@ const Dashboard = ({user}: DashboardProps) => {
             setBestResult(res.data);
         }
 
-        getBest();
-    }, [user?.user_id]);
-
-    useEffect(() => {
-        if (!user?.user_id) return;
-
         const getLast = async () => {
             const res = await supabase.from("results")
                 .select("*")
                 .eq("user_id", user?.user_id)
                 .order("created_at", {ascending: false})
                 .limit(1)
-                .single();
+                .maybeSingle();
 
             if (res.error) {
                 setError(res.error.message);
@@ -78,42 +72,52 @@ const Dashboard = ({user}: DashboardProps) => {
             setLastResult(res.data);
         }
 
+        getBest();
         getLast();
     }, [user?.user_id]);
 
     return (
-        <>
+        <div className="mx-auto mt-6 w-3/4">
             {error && <p className="bg-red-400">{error}</p>}
 
-            <button onClick={() => navigate("/student/training/create")}>Sākt spēli</button>
-
-            <div>
-                <h2>Pārbaudes darbi</h2>
-                <ul>
-                    {tests && tests.length > 0 ?
-                        tests.map((test) => (
-                            <li key={test.training_id}>{test.title} | {test.status === "pending" ? "jauns" : "izpildīts"}</li>
-                        ))
-                    :
-                    <p>Nav pārbaudes darbu</p>}
-                </ul>
+            <div className="flex justify-center">
+                <button
+                    onClick={() => navigate("/student/training/create")}
+                    className="w-1/3 bg-green-500 p-3 rounded-md text-lg cursor-pointer"
+                >
+                    Sākt spēli
+                </button>
             </div>
 
-            <div>
-                <h2>Mans progress</h2>
-                <p>Labākais rezultāts: {bestResult ? bestResult.score : 0} punkti</p>
-                <p>Pēdējais rezultāts: {lastResult ? lastResult.score : 0} punkti</p>
-            </div>
+            <div className="w-full flex gap-5 mt-10">
+                <div className="w-1/3 border rounded-xl p-3">
+                    <h2 className="text-xl font-bold text-center mb-3">Pārbaudes darbi</h2>
+                    <ul>
+                        {tests && tests.length > 0 ?
+                            tests.map((test) => (
+                                <li key={test.training_id}>{test.title} | {test.status === "pending" ? "jauns" : "izpildīts"}</li>
+                            ))
+                        :
+                        <p>Nav pārbaudes darbu</p>}
+                    </ul>
+                </div>
 
-            <div>
-                <h2>Reitings</h2>
-                <ol>
-                    <li>Anna Roze - 982 punkti</li>
-                    <li>Mārcis Gudrais - 973 punkti</li>
-                    <li>Jānis Ozoliņš - 935 punkti</li>
-                </ol>
+                <div className="w-1/3 border rounded-xl p-3">
+                    <h2 className="text-xl font-bold text-center mb-3">Mans progress</h2>
+                    <p>Labākais rezultāts: {bestResult ? bestResult.score : 0} punkti</p>
+                    <p>Pēdējais rezultāts: {lastResult ? lastResult.score : 0} punkti</p>
+                </div>
+
+                <div className="w-1/3 border rounded-xl p-3">
+                    <h2 className="text-xl font-bold text-center mb-3">Reitings</h2>
+                    <ol>
+                        <li>Anna Roze - 982 punkti</li>
+                        <li>Mārcis Gudrais - 973 punkti</li>
+                        <li>Jānis Ozoliņš - 935 punkti</li>
+                    </ol>
+                </div>
             </div>
-        </>
+        </div>
     )
 }
 
