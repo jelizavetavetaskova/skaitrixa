@@ -26,6 +26,7 @@ export type User = {
 
 export type Training = {
     training_id: number,
+    title: string,
     type: "training" | "test",
     level: "easy" | "medium" | "hard",
     tasks_amount: number,
