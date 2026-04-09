@@ -5,6 +5,7 @@ import LoginPage from "../pages/LoginPage.tsx";
 import RegisterPage from "../pages/RegisterPage.tsx";
 import Dashboard from "../pages/Dashboard.tsx";
 import Layout from "../shared/components/Layout.tsx";
+import CreateTrainingPage from "../features/training/CreateTrainingPage.tsx";
 
 interface RouterProps {
     user: User | null;
@@ -32,7 +33,7 @@ const RouterComponent = ({user}: RouterProps) => {
                 <Route path="/student/training/create" element={
                     <ProtectedRoute user={user} roles={["student"]}>
                         <Layout>
-                            <h1>Izveidot treniņu</h1>
+                            <CreateTrainingPage user={user} type="training" />
                         </Layout>
                     </ProtectedRoute>
                 } />
