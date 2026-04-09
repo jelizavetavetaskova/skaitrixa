@@ -2,7 +2,7 @@ export type Class = {
     class_id: number,
     number: number,
     letter: string,
-    teacher_id: number,
+    teacher_id: string,
     school_id: number,
     created_at: string
 }
@@ -14,7 +14,7 @@ export type School = {
 }
 
 export type User = {
-    user_id: number,
+    user_id: string,
     email: string,
     name: string,
     surname: string,
@@ -26,13 +26,15 @@ export type User = {
 
 export type Training = {
     training_id: number,
+    title: string,
     type: "training" | "test",
     level: "easy" | "medium" | "hard",
     tasks_amount: number,
     time: number,
     operations: string[],
-    student_id: number,
-    teacher_id: number,
+    student_id: string,
+    teacher_id: string,
+    status: "pending" | "completed",
     created_at: string
 }
 
@@ -51,7 +53,7 @@ export type Result = {
     accuracy: number,
     average_time: number,
     training_id: number,
-    user_id: number,
+    user_id: string,
     created_at: string
 }
 
