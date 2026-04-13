@@ -9,11 +9,11 @@ interface CreateTrainingProps {
 }
 
 const CreateTrainingPage = ({type, user}: CreateTrainingProps) => {
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<{title: string, level: string, amountOfTasks: number, operations: string[], time: number}>({
         title: "",
         level: "easy",
         amountOfTasks: 0,
-        operations: [""],
+        operations: [],
         time: 0,
     })
 
@@ -66,7 +66,7 @@ const CreateTrainingPage = ({type, user}: CreateTrainingProps) => {
             title: "",
             level: "easy",
             amountOfTasks: 0,
-            operations: [""],
+            operations: [],
             time: 0,
         });
 
@@ -122,6 +122,10 @@ const CreateTrainingPage = ({type, user}: CreateTrainingProps) => {
                 <label>
                     <input type="radio" value={30} name="amountOfTasks" checked={formData.amountOfTasks === 30} onChange={handleChange}/>
                     30
+                </label>
+                <label>
+                    <input type="radio" value={0} name="amountOfTasks" checked={formData.amountOfTasks === 0} onChange={handleChange}/>
+                    Bez ierobežojuma
                 </label>
             </div>
 

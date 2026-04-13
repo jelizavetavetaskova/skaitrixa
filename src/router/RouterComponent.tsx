@@ -6,6 +6,7 @@ import RegisterPage from "../pages/RegisterPage.tsx";
 import Dashboard from "../pages/Dashboard.tsx";
 import Layout from "../shared/components/Layout.tsx";
 import CreateTrainingPage from "../features/training/CreateTrainingPage.tsx";
+import GamePage from "../pages/GamePage.tsx";
 
 interface RouterProps {
     user: User | null;
@@ -41,7 +42,7 @@ const RouterComponent = ({user}: RouterProps) => {
                 <Route path="/game/:training_id" element={
                     <ProtectedRoute user={user} roles={["student"]}>
                         <Layout>
-                            <h1>Treniņš</h1>
+                            <GamePage />
                         </Layout>
                     </ProtectedRoute>
                 } />
