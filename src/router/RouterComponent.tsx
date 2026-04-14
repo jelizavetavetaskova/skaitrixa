@@ -44,7 +44,7 @@ const RouterComponent = ({user}: RouterProps) => {
                 <Route path="/game/:training_id" element={
                     <ProtectedRoute user={user} roles={["student"]}>
                         <Layout>
-                            <GamePage />
+                            <GamePage user={user}/>
                         </Layout>
                     </ProtectedRoute>
                 } />

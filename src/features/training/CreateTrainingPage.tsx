@@ -9,10 +9,9 @@ interface CreateTrainingProps {
 }
 
 const CreateTrainingPage = ({type, user}: CreateTrainingProps) => {
-    const [formData, setFormData] = useState<{title: string, level: string, amountOfTasks: number, operations: string[], time: number}>({
+    const [formData, setFormData] = useState<{title: string, level: string, operations: string[], time: number}>({
         title: "",
         level: "easy",
-        amountOfTasks: 0,
         operations: [],
         time: 0,
     })
@@ -26,7 +25,7 @@ const CreateTrainingPage = ({type, user}: CreateTrainingProps) => {
 
         setFormData((prev) => ({
             ...prev,
-            [name]: name === "amountOfTasks" ? Number(value) : value
+            [name]: name === "amountOfTasks" || name === "time"? Number(value) : value
         }))
     }
 
@@ -50,7 +49,6 @@ const CreateTrainingPage = ({type, user}: CreateTrainingProps) => {
                 title: formData.title,
                 type: type,
                 level: formData.level,
-                tasks_amount: formData.amountOfTasks,
                 time: formData.time,
                 operations: formData.operations,
                 status: "pending",
@@ -65,7 +63,6 @@ const CreateTrainingPage = ({type, user}: CreateTrainingProps) => {
         setFormData({
             title: "",
             level: "easy",
-            amountOfTasks: 0,
             operations: [],
             time: 0,
         });
@@ -109,24 +106,21 @@ const CreateTrainingPage = ({type, user}: CreateTrainingProps) => {
             </div>
 
             <div>
-                <p>Uzdevumu skaits:</p>
+                <p>Laiks:</p>
 
                 <label>
-                    <input type="radio" value={10} name="amountOfTasks" checked={formData.amountOfTasks === 10} onChange={handleChange}/>
-                    10
+                    <input type="radio" value={30} name="time" checked={formData.time === 30} onChange={handleChange}/>
+                    30 sekundes
                 </label>
                 <label>
-                    <input type="radio" value={20} name="amountOfTasks" checked={formData.amountOfTasks === 20} onChange={handleChange}/>
-                    20
+                    <input type="radio" value={60} name="time" checked={formData.time === 60} onChange={handleChange}/>
+                    1 minūte (60 sekundes)
                 </label>
                 <label>
-                    <input type="radio" value={30} name="amountOfTasks" checked={formData.amountOfTasks === 30} onChange={handleChange}/>
-                    30
+                    <input type="radio" value={120} name="time" checked={formData.time === 120} onChange={handleChange}/>
+                    2 minūtes (120 sekundes)
                 </label>
-                <label>
-                    <input type="radio" value={0} name="amountOfTasks" checked={formData.amountOfTasks === 0} onChange={handleChange}/>
-                    Bez ierobežojuma
-                </label>
+
             </div>
 
             <div>
