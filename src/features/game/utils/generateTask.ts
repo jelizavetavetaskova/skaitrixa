@@ -19,7 +19,10 @@ export const generateTask = (level: string, operations: string[]): GeneratedTask
 
     let correct: number = 0;
     if (operation === "+") correct = firstNum + secondNum;
-    else if (operation === "-") correct = firstNum - secondNum;
+    else if (operation === "-") {
+        firstNum = Math.floor(Math.random() * (max - secondNum + 1)) + secondNum;
+        correct = firstNum - secondNum;
+    }
     else if (operation === "*") correct = firstNum * secondNum;
     else if (operation === "/") {
         correct = Math.floor(Math.random() * (max - min + 1)) + min;

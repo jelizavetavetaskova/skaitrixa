@@ -17,7 +17,9 @@ const RouterComponent = ({user}: RouterProps) => {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<h1>Galvenā lapa</h1>} />
+                <Route path="/" element={
+                    <h1>Galvenā lapa</h1>
+                } />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
 
