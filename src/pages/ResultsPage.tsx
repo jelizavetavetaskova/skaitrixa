@@ -1,4 +1,4 @@
-import {useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import type {Answer, Result, Task} from "../shared/types/database.ts";
 import {supabase} from "../lib/supabase.ts";
@@ -90,7 +90,7 @@ const ResultsPage = () => {
                     <div>
                         <p>Punkti: {result.score}</p>
                         <p>Precizitāte: {result.accuracy}%</p>
-                        <p>Vidējais laiks: {result.average_time}</p>
+                        <p>Vidējais laiks: {result.average_time.toFixed(2)}</p>
                     </div>
 
                     <div>
@@ -114,6 +114,8 @@ const ResultsPage = () => {
                     </div>
                 </div>
             }
+
+            <Link to="/dashboard">Atpakaļ uz dashboard</Link>
 
             {error && <p>{error}</p>}
         </div>
