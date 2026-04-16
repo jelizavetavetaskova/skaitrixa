@@ -7,6 +7,7 @@ import Dashboard from "../pages/Dashboard.tsx";
 import Layout from "../shared/components/Layout.tsx";
 import CreateTrainingPage from "../features/training/CreateTrainingPage.tsx";
 import GamePage from "../pages/GamePage.tsx";
+import ResultsPage from "../pages/ResultsPage.tsx";
 
 interface RouterProps {
     user: User | null;
@@ -52,7 +53,7 @@ const RouterComponent = ({user}: RouterProps) => {
                 <Route path="/student/results/:result_id" element={
                     <ProtectedRoute user={user} roles={["student"]}>
                         <Layout>
-                            <h1>Rezultāti</h1>
+                            <ResultsPage />
                         </Layout>
                     </ProtectedRoute>
                 } />

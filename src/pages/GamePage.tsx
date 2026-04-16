@@ -22,15 +22,16 @@ const GamePage = ({user}: GameProps) => {
     const {training_id} = useParams();
 
     const [error, setError] = useState("");
+    const [text, setText] = useState("");
+
     const [training, setTraining] = useState<Training|null>(null);
-
     const [currentTask, setCurrentTask] = useState<GeneratedTask|null>(null);
-
     const [answer, setAnswer] = useState("");
+
+    const [isBlocked, setIsBlocked] = useState(false);
 
     const [correct, setCorrect] = useState(0);
     const correctRef = useRef(0)
-
     const [mistakes, setMistakes] = useState(0);
     const mistakesRef = useRef(0);
 
@@ -44,15 +45,27 @@ const GamePage = ({user}: GameProps) => {
         const taskId = await saveTask();
 
         if (Number(answer) == currentTask?.correct) {
-            alert("Pareizi!");
+            setText("✔")
             correctRef.current += 1;
             setCorrect((c)=> c + 1);
         }
         else {
-            alert("Nepareizi!");
+            setText("❌");
             mistakesRef.current += 1
             setMistakes((m) => m + 1);
         }
+
+        setIsBlocked(true);
+
+        setTimeout(() => {
+            setAnswer("");
+            setText("");
+
+            if (training) setCurrentTask(generateTask(training?.level, training?.operations))
+            taskStart.current = Date.now();
+
+            setIsBlocked(false);
+        }, 500)
 
         answersRef.current = [...answersRef.current, {
             answer: Number(answer),
@@ -61,13 +74,6 @@ const GamePage = ({user}: GameProps) => {
             time_spent: (Date.now() - taskStart.current) / 1000,
             task_id: taskId
         }]
-
-
-        setAnswer("");
-
-        if (training) setCurrentTask(generateTask(training?.level, training?.operations))
-        // eslint-disable-next-line react-hooks/purity
-        taskStart.current = Date.now();
     }
 
     const handleDelete = () => {
@@ -102,9 +108,10 @@ const GamePage = ({user}: GameProps) => {
 
         const average = timeSum / times.length;
 
+        console.log("training: ", training)
         const {data, error} = await supabase.from("results").insert({
             score: correctRef.current,
-            accuracy: accuracy,
+            accuracy: Math.floor(accuracy),
             average_time: average,
             training_id: training?.training_id,
             user_id: user?.user_id
@@ -129,6 +136,7 @@ const GamePage = ({user}: GameProps) => {
             })
         }
 
+        setIsBlocked(true);
         navigate(`/student/results/${result_id}`);
     }
 
@@ -164,7 +172,7 @@ const GamePage = ({user}: GameProps) => {
 
     return (
         <div>
-            <p>{currentTask?.firstNum} {currentTask?.operation} {currentTask?.secondNum} = {answer}</p>
+            <p>{currentTask?.firstNum} {currentTask?.operation} {currentTask?.secondNum} = {answer} {text && text}</p>
 
             {training && <Timer seconds={training.time} onTimeUp={endGame} />}
             <p>Correct: {correct}, mistakes: {mistakes}</p>
@@ -172,6 +180,7 @@ const GamePage = ({user}: GameProps) => {
                 onInput={(d) => setAnswer((prev) => prev.concat(d))}
                 onDelete={handleDelete}
                 onSubmit={handleSubmit}
+                isBlocked={isBlocked}
             />
 
             {error && <p>{error}</p>}
