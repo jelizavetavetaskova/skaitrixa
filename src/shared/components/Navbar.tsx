@@ -46,24 +46,33 @@ const Navbar = ({user}: NavbarProps) => {
     }, [user?.school_id, user?.class_id]);
 
     return (
-        <div>
-            <p>MATHIX</p>
+        <div className="flex py-3 text-lg px-3 bg-primary text-white items-center justify-between">
+            <p className="text-3xl font-bold">SKAITRIXA</p>
 
             {user ?
                 <div>
-                    { user.role === "student" && school && stClass &&
-                        <p>{school.name + ", "}{stClass.number + "." + stClass.letter + " klase"}</p>
-                    }
-                    <div>
-                        <div/>
-                        <p>Online</p>
+                    <div className="hidden md:block">
+                        { user.role === "student" && school && stClass &&
+                            <p className="flex-1">{school.name + ", "}{stClass.number + "." + stClass.letter + " klase"}</p>
+                        }
+                        <div>
+                            <div className="rounded-full bg-success"/>
+                            <p>Online</p>
+                        </div>
+                        <p>{user.name} {user.surname}</p>
                     </div>
-                    <p>{user.name} {user.surname}</p>
-                    <button onClick={signOut}>Iziet</button>
+                    <div className="flex items-center gap-2">
+                        <img
+                            src="/user_icon.png"
+                            alt="Account"
+                            className="w-15"
+                        />
+                        <button onClick={signOut}>Iziet</button>
+                    </div>
                 </div>
                 :
                 <div>
-                    <Link to="/login">Autorizēties</Link> | <Link to="/register">Reģistrēties</Link>
+                    <Link to="/login">Autorizēties</Link>
                 </div>
             }
 

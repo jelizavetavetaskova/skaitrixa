@@ -8,6 +8,7 @@ import CreateTrainingPage from "../features/training/CreateTrainingPage.tsx";
 import GamePage from "../pages/GamePage.tsx";
 import ResultsPage from "../pages/ResultsPage.tsx";
 import Navbar from "../shared/components/Navbar.tsx";
+import HomePage from "../pages/HomePage.tsx";
 
 interface RouterProps {
     user: User | null;
@@ -20,7 +21,7 @@ const RouterComponent = ({user}: RouterProps) => {
             <Navbar user={user} />
             <Routes>
                 <Route path="/" element={
-                    <h1>Galvenā lapa</h1>
+                    <HomePage />
                 } />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
