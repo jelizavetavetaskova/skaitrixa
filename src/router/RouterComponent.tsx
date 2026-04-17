@@ -5,6 +5,9 @@ import LoginPage from "../pages/LoginPage.tsx";
 import RegisterPage from "../pages/RegisterPage.tsx";
 import Dashboard from "../pages/Dashboard.tsx";
 import Layout from "../shared/components/Layout.tsx";
+import CreateTrainingPage from "../features/training/CreateTrainingPage.tsx";
+import GamePage from "../pages/GamePage.tsx";
+import ResultsPage from "../pages/ResultsPage.tsx";
 
 interface RouterProps {
     user: User | null;
@@ -15,7 +18,9 @@ const RouterComponent = ({user}: RouterProps) => {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<h1>Galvenā lapa</h1>} />
+                <Route path="/" element={
+                    <h1>Galvenā lapa</h1>
+                } />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
 
@@ -32,7 +37,7 @@ const RouterComponent = ({user}: RouterProps) => {
                 <Route path="/student/training/create" element={
                     <ProtectedRoute user={user} roles={["student"]}>
                         <Layout>
-                            <h1>Izveidot treniņu</h1>
+                            <CreateTrainingPage user={user} type="training" />
                         </Layout>
                     </ProtectedRoute>
                 } />
@@ -40,7 +45,7 @@ const RouterComponent = ({user}: RouterProps) => {
                 <Route path="/game/:training_id" element={
                     <ProtectedRoute user={user} roles={["student"]}>
                         <Layout>
-                            <h1>Treniņš</h1>
+                            <GamePage user={user}/>
                         </Layout>
                     </ProtectedRoute>
                 } />
@@ -48,7 +53,7 @@ const RouterComponent = ({user}: RouterProps) => {
                 <Route path="/student/results/:result_id" element={
                     <ProtectedRoute user={user} roles={["student"]}>
                         <Layout>
-                            <h1>Rezultāti</h1>
+                            <ResultsPage />
                         </Layout>
                     </ProtectedRoute>
                 } />

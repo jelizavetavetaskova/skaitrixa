@@ -29,7 +29,6 @@ export type Training = {
     title: string,
     type: "training" | "test",
     level: "easy" | "medium" | "hard",
-    tasks_amount: number,
     time: number,
     operations: string[],
     student_id: string,
