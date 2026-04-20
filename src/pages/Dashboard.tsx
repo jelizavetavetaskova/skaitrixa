@@ -85,7 +85,7 @@ const Dashboard = ({user}: DashboardProps) => {
             <div className="flex justify-center mt-7">
                 <button
                     onClick={() => navigate("/student/training/create")}
-                    className="bg-green-700 text-white px-15 py-5 rounded text-xl font-bold"
+                    className="bg-green-700 text-white px-15 py-5 rounded text-xl font-bold cursor-pointer"
                 >
                     Sākt spēli
                 </button>
