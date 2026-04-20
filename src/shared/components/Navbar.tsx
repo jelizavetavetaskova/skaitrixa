@@ -65,7 +65,7 @@ const Navbar = ({user}: NavbarProps) => {
                         <img
                             src="/user_icon.png"
                             alt="Account"
-                            className="w-15"
+                            className="w-10"
                         />
                         <button onClick={signOut}>Iziet</button>
                     </div>
