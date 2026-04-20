@@ -21,7 +21,7 @@ const RouterComponent = ({user}: RouterProps) => {
             <Navbar user={user} />
             <Routes>
                 <Route path="/" element={
-                    <HomePage />
+                    <HomePage user={user} />
                 } />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
