@@ -80,74 +80,84 @@ const CreateTrainingPage = ({type, user}: CreateTrainingProps) => {
     }
 
     return (
-        <form onSubmit={handleSubmit}>
-            <h1>Izveidot treniņu</h1>
+        <div className="max-w-xl mx-auto bg-bg p-5 min-h-screen md:min-h-0 shadow-md rounded">
+            <h1 className="text-3xl text-primary text-center font-bold mb-3">Izveidot treniņu</h1>
 
-            <div>
-                <label htmlFor="title">Treniņa nosaukums</label>
-                <input type="text" value={formData.title} onChange={handleChange} name="title" id="title"/>
-            </div>
+            <form onSubmit={handleSubmit}>
 
-            <div>
-                <p>Līmenis:</p>
+                <div className="flex flex-col mx-auto justify-center items-center mb-4">
+                    <label htmlFor="title" className="text-lg mb-2">Treniņa nosaukums</label>
+                    <input type="text" value={formData.title} onChange={handleChange} name="title" id="title" className="p-3 w-2/3 rounded border border-gray-300 outline-primary"/>
+                </div>
 
-                <label>
-                    <input type="radio" value="easy" name="level" checked={formData.level === "easy"} onChange={handleChange}/>
-                    Viegls
-                </label>
-                <label>
-                    <input type="radio" value="medium" name="level" checked={formData.level === "medium"} onChange={handleChange}/>
-                    Vidējs
-                </label>
-                <label>
-                    <input type="radio" value="hard" name="level" checked={formData.level === "hard"} onChange={handleChange}/>
-                    Grūts
-                </label>
-            </div>
+                <div className="flex flex-col mx-auto justify-center items-center mb-4">
+                    <p className="text-lg mb-2">Līmenis:</p>
 
-            <div>
-                <p>Laiks:</p>
+                    <div className="flex flex-row gap-2 my-2">
+                        <label>
+                            <input type="radio" value="easy" name="level" checked={formData.level === "easy"} onChange={handleChange} className="peer hidden"/>
+                            <span className="peer-checked:bg-primary peer-checked:text-white border border-primary px-4 py-2 rounded">Viegls</span>
+                        </label>
+                        <label>
+                            <input type="radio" value="medium" name="level" checked={formData.level === "medium"} onChange={handleChange} className="peer hidden"/>
+                            <span className="peer-checked:bg-primary peer-checked:text-white border border-primary px-4 py-2 rounded">Vidējs</span>
+                        </label>
+                        <label>
+                            <input type="radio" value="hard" name="level" checked={formData.level === "hard"} onChange={handleChange} className="peer hidden"/>
+                            <span className="peer-checked:bg-primary peer-checked:text-white border border-primary px-4 py-2 rounded">Grūts</span>
+                        </label>
+                    </div>
+                </div>
 
-                <label>
-                    <input type="radio" value={30} name="time" checked={formData.time === 30} onChange={handleChange}/>
-                    30 sekundes
-                </label>
-                <label>
-                    <input type="radio" value={60} name="time" checked={formData.time === 60} onChange={handleChange}/>
-                    1 minūte (60 sekundes)
-                </label>
-                <label>
-                    <input type="radio" value={120} name="time" checked={formData.time === 120} onChange={handleChange}/>
-                    2 minūtes (120 sekundes)
-                </label>
+                <div className="flex flex-col mx-auto justify-center items-center mb-4">
+                    <p className="text-lg mb-2">Laiks:</p>
 
-            </div>
+                    <div className="flex flex-col md:flex-row md:gap-2">
+                        <label>
+                            <input type="radio" value={30} name="time" checked={formData.time === 30} onChange={handleChange} className="peer hidden"/>
+                            <span className="block my-1 text-center peer-checked:bg-primary peer-checked:text-white border border-primary px-4 py-2 rounded">30 sekundes</span>
+                        </label>
+                        <label>
+                            <input type="radio" value={60} name="time" checked={formData.time === 60} onChange={handleChange} className="peer hidden"/>
+                            <span className="block my-1 text-center peer-checked:bg-primary peer-checked:text-white border border-primary px-4 py-2 rounded">1 minūte</span>
+                        </label>
+                        <label>
+                            <input type="radio" value={120} name="time" checked={formData.time === 120} onChange={handleChange} className="peer hidden"/>
+                            <span className="block my-1 text-center peer-checked:bg-primary peer-checked:text-white border border-primary px-4 py-2 rounded">2 minūtes</span>
+                        </label>
+                    </div>
+                </div>
 
-            <div>
-                <p>Darbības:</p>
+                <div className="flex flex-col mx-auto justify-center items-center mb-4">
+                    <p className="text-lg mb-2">Darbības:</p>
 
-                <label>
-                    <input type="checkbox" checked={formData.operations.includes("+")} onChange={() => toggleOperation("+")}/>
-                    +
-                </label>
-                <label>
-                    <input type="checkbox" checked={formData.operations.includes("-")} onChange={() => toggleOperation("-")}/>
-                    -
-                </label>
-                <label>
-                    <input type="checkbox" checked={formData.operations.includes("*")} onChange={() => toggleOperation("*")}/>
-                    *
-                </label>
-                <label>
-                    <input type="checkbox" checked={formData.operations.includes("/")} onChange={() => toggleOperation("/")}/>
-                    /
-                </label>
-            </div>
+                    <div className="flex flex-row gap-2 mt-2 text-xl">
+                        <label>
+                            <input type="checkbox" checked={formData.operations.includes("+")} onChange={() => toggleOperation("+")} className="peer hidden"/>
+                            <span className="peer-checked:bg-primary w-12 text-center inline-block peer-checked:text-white border border-primary px-4 py-2 rounded">+</span>
+                        </label>
+                        <label>
+                            <input type="checkbox" checked={formData.operations.includes("-")} onChange={() => toggleOperation("-")} className="peer hidden"/>
+                            <span className="peer-checked:bg-primary w-12 text-center inline-block peer-checked:text-white border border-primary px-4 py-2 rounded">-</span>
+                        </label>
+                        <label>
+                            <input type="checkbox" checked={formData.operations.includes("*")} onChange={() => toggleOperation("*")} className="peer hidden"/>
+                            <span className="peer-checked:bg-primary w-12 text-center inline-block peer-checked:text-white border border-primary px-4 py-2 rounded">×</span>
+                        </label>
+                        <label>
+                            <input type="checkbox" checked={formData.operations.includes("/")} onChange={() => toggleOperation("/")} className="peer hidden"/>
+                            <span className="peer-checked:bg-primary w-12 text-center inline-block peer-checked:text-white border border-primary px-4 py-2 rounded">÷</span>
+                        </label>
+                    </div>
+                </div>
 
-            <button type="submit">Sākt treniņu</button>
+                <div className="flex justify-center">
+                    <button type="submit" className="text-white text-lg font-semibold bg-primary p-3 rounded w-2/3 md:w-1/3 mt-4">Sākt treniņu</button>
+                </div>
 
-            {error && <p>{error}</p>}
-        </form>
+                {error && <p>{error}</p>}
+            </form>
+        </div>
     )
 }
 

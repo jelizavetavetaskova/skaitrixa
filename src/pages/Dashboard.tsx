@@ -77,21 +77,23 @@ const Dashboard = ({user}: DashboardProps) => {
     }, [user?.user_id]);
 
     return (
-        <div className="mx-auto mt-6 w-3/4">
-            {error && <p className="bg-red-400">{error}</p>}
+        <div className="max-w-5xl mx-auto bg-bg p-5 min-h-screen md:min-h-0 shadow-md rounded pb-10">
+            {error && <p className="text-danger">{error}</p>}
 
-            <div className="flex justify-center">
+            <h1 className="text-3xl text-primary text-center font-bold">Sveik{(user?.name.endsWith("a") || user?.name.endsWith("e")) ? "a" : "s"}, {user?.name}!</h1>
+
+            <div className="flex justify-center mt-7">
                 <button
                     onClick={() => navigate("/student/training/create")}
-                    className="w-1/3 bg-green-500 p-3 rounded-md text-lg cursor-pointer"
+                    className="bg-green-700 text-white px-15 py-5 rounded text-xl font-bold cursor-pointer"
                 >
                     Sākt spēli
                 </button>
             </div>
 
-            <div className="w-full flex gap-5 mt-10">
-                <div className="w-1/3 border rounded-xl p-3">
-                    <h2 className="text-xl font-bold text-center mb-3">Pārbaudes darbi</h2>
+            <div className="flex flex-col md:flex-row mt-7 items-center justify-center gap-5 md:mx-15 md:items-stretch">
+                <div className="border border-gray-400 rounded p-5 w-4/5">
+                    <h2 className="text-2xl text-primary text-center font-semibold mb-3">Pārbaudes darbi</h2>
                     <ul>
                         {tests && tests.length > 0 ?
                             tests.map((test) => (
@@ -102,18 +104,16 @@ const Dashboard = ({user}: DashboardProps) => {
                     </ul>
                 </div>
 
-                <div className="w-1/3 border rounded-xl p-3">
-                    <h2 className="text-xl font-bold text-center mb-3">Mans progress</h2>
+                <div className="border border-gray-400 rounded p-5 w-4/5">
+                    <h2 className="text-2xl text-primary text-center font-semibold mb-3">Mans progress</h2>
                     <p>Labākais rezultāts: {bestResult ? bestResult.score : 0} punkti</p>
                     <p>Pēdējais rezultāts: {lastResult ? lastResult.score : 0} punkti</p>
                 </div>
 
-                <div className="w-1/3 border rounded-xl p-3">
-                    <h2 className="text-xl font-bold text-center mb-3">Reitings</h2>
+                <div className="border border-gray-400 rounded p-5 w-4/5">
+                    <h2 className="text-2xl text-primary text-center font-semibold mb-3">Reitings</h2>
                     <ol>
-                        <li>Anna Roze - 982 punkti</li>
-                        <li>Mārcis Gudrais - 973 punkti</li>
-                        <li>Jānis Ozoliņš - 935 punkti</li>
+
                     </ol>
                 </div>
             </div>

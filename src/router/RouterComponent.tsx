@@ -4,10 +4,11 @@ import type {User} from "../shared/types/database.ts";
 import LoginPage from "../pages/LoginPage.tsx";
 import RegisterPage from "../pages/RegisterPage.tsx";
 import Dashboard from "../pages/Dashboard.tsx";
-import Layout from "../shared/components/Layout.tsx";
 import CreateTrainingPage from "../features/training/CreateTrainingPage.tsx";
 import GamePage from "../pages/GamePage.tsx";
 import ResultsPage from "../pages/ResultsPage.tsx";
+import Navbar from "../shared/components/Navbar.tsx";
+import HomePage from "../pages/HomePage.tsx";
 
 interface RouterProps {
     user: User | null;
@@ -17,9 +18,10 @@ interface RouterProps {
 const RouterComponent = ({user}: RouterProps) => {
     return (
         <BrowserRouter>
+            <Navbar user={user} />
             <Routes>
                 <Route path="/" element={
-                    <h1>Galvenā lapa</h1>
+                    <HomePage user={user} />
                 } />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
@@ -27,59 +29,45 @@ const RouterComponent = ({user}: RouterProps) => {
                 {/* SKOLĒNS */}
                 <Route path="/dashboard" element={
                     <ProtectedRoute user={user} roles={["student"]}>
-                        <Layout>
-                            <Dashboard user={user}/>
-                        </Layout>
+                        <Dashboard user={user}/>
                     </ProtectedRoute>
                 } />
 
 
                 <Route path="/student/training/create" element={
                     <ProtectedRoute user={user} roles={["student"]}>
-                        <Layout>
-                            <CreateTrainingPage user={user} type="training" />
-                        </Layout>
+                        <CreateTrainingPage user={user} type="training" />
                     </ProtectedRoute>
                 } />
 
                 <Route path="/game/:training_id" element={
                     <ProtectedRoute user={user} roles={["student"]}>
-                        <Layout>
-                            <GamePage user={user}/>
-                        </Layout>
+                        <GamePage user={user}/>
                     </ProtectedRoute>
                 } />
 
                 <Route path="/student/results/:result_id" element={
                     <ProtectedRoute user={user} roles={["student"]}>
-                        <Layout>
-                            <ResultsPage />
-                        </Layout>
+                        <ResultsPage />
                     </ProtectedRoute>
                 } />
 
                 {/* SKOLOTĀJS */}
                 <Route path="/teacher" element={
-                        <ProtectedRoute user={user} roles={["teacher"]}>
-                            <Layout>
-                                <h1>Skolotāja lapa</h1>
-                            </Layout>
-                        </ProtectedRoute>
+                    <ProtectedRoute user={user} roles={["teacher"]}>
+                        <h1>Skolotāja lapa</h1>
+                    </ProtectedRoute>
                 } />
 
                 <Route path="/teacher/test/create" element={
-                        <ProtectedRoute user={user} roles={["teacher"]}>
-                            <Layout>
-                                <h1>Izveidot kontroldarbu</h1>
-                            </Layout>
-                        </ProtectedRoute>
+                    <ProtectedRoute user={user} roles={["teacher"]}>
+                        <h1>Izveidot kontroldarbu</h1>
+                    </ProtectedRoute>
                 } />
 
                 <Route path="/teacher/results" element={
                     <ProtectedRoute user={user} roles={["teacher"]}>
-                        <Layout>
-                            <h1>Skolēnu rezultāti</h1>
-                        </Layout>
+                        <h1>Skolēnu rezultāti</h1>
                     </ProtectedRoute>
                 } />
 
@@ -92,11 +80,9 @@ const RouterComponent = ({user}: RouterProps) => {
 
                 {/* ielogotie lietotāji */}
                 <Route path="/profile" element={
-                        <ProtectedRoute user={user} roles={["teacher", "student", "admin"]}>
-                            <Layout>
-                                <h1>Profils</h1>
-                            </Layout>
-                        </ProtectedRoute>
+                    <ProtectedRoute user={user} roles={["teacher", "student", "admin"]}>
+                        <h1>Profils</h1>
+                    </ProtectedRoute>
                 } />
             </Routes>
         </BrowserRouter>
