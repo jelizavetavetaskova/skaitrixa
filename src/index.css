@@ -8,3 +8,17 @@
     --color-card: #FFFFFF;
     --color-keyboard: #E5E7EB;
 }
+
+body {
+    position: relative;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url('/public/background.webp');
+    background-size: cover;
+    opacity: 0.05;
+    z-index: -1;
+}

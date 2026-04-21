@@ -77,10 +77,10 @@ const Dashboard = ({user}: DashboardProps) => {
     }, [user?.user_id]);
 
     return (
-        <div className="mt-6">
+        <div className="max-w-5xl mx-auto bg-bg p-5 min-h-screen md:min-h-0 shadow-md rounded pb-10">
             {error && <p className="text-danger">{error}</p>}
 
-            <h1 className="text-3xl text-primary text-center font-bold">Sveik{(user?.surname.endsWith("a") || user?.surname.endsWith("e")) ? "a" : "s"}, {user?.name}!</h1>
+            <h1 className="text-3xl text-primary text-center font-bold">Sveik{(user?.name.endsWith("a") || user?.name.endsWith("e")) ? "a" : "s"}, {user?.name}!</h1>
 
             <div className="flex justify-center mt-7">
                 <button
@@ -92,7 +92,7 @@ const Dashboard = ({user}: DashboardProps) => {
             </div>
 
             <div className="flex flex-col md:flex-row mt-7 items-center justify-center gap-5 md:mx-15 md:items-stretch">
-                <div className="border border-gray-400 rounded p-5 w-2/3">
+                <div className="border border-gray-400 rounded p-5 w-4/5">
                     <h2 className="text-2xl text-primary text-center font-semibold mb-3">Pārbaudes darbi</h2>
                     <ul>
                         {tests && tests.length > 0 ?
@@ -104,13 +104,13 @@ const Dashboard = ({user}: DashboardProps) => {
                     </ul>
                 </div>
 
-                <div className="border border-gray-400 rounded p-5 w-2/3">
+                <div className="border border-gray-400 rounded p-5 w-4/5">
                     <h2 className="text-2xl text-primary text-center font-semibold mb-3">Mans progress</h2>
                     <p>Labākais rezultāts: {bestResult ? bestResult.score : 0} punkti</p>
                     <p>Pēdējais rezultāts: {lastResult ? lastResult.score : 0} punkti</p>
                 </div>
 
-                <div className="border border-gray-400 rounded p-5 w-2/3">
+                <div className="border border-gray-400 rounded p-5 w-4/5">
                     <h2 className="text-2xl text-primary text-center font-semibold mb-3">Reitings</h2>
                     <ol>
 

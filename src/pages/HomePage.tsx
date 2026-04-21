@@ -8,7 +8,7 @@ interface HomepageProps {
 const HomePage = ({user}: HomepageProps) => {
 
     return (
-        <div className="max-w-6xl mx-auto pt-8 px-4">
+        <div className="max-w-3xl mx-auto bg-bg p-5 min-h-screen md:min-h-0 shadow-md rounded">
             <h1 className="text-3xl text-center font-bold text-primary pb-5">SKAITRIXA - galvas rēķinu treniņu platforma</h1>
 
             <p className="my-7 text-justify text-lg md:text-xl">

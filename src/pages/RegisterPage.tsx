@@ -60,7 +60,7 @@ const RegisterPage = () => {
     }
 
     return (
-        <div className="mx-auto py-6 max-w-2xl">
+        <div className="max-w-md mx-auto bg-bg p-5 min-h-screen md:min-h-0 shadow-md rounded">
             <h1 className="text-3xl text-primary font-bold text-center pb-6">Reģistrācija</h1>
 
             <form onSubmit={handleSubmit}>

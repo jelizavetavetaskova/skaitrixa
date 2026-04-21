@@ -80,14 +80,14 @@ const CreateTrainingPage = ({type, user}: CreateTrainingProps) => {
     }
 
     return (
-        <div className="mt-5 md:w-2/3 mx-auto">
+        <div className="max-w-xl mx-auto bg-bg p-5 min-h-screen md:min-h-0 shadow-md rounded">
             <h1 className="text-3xl text-primary text-center font-bold mb-3">Izveidot treniņu</h1>
 
             <form onSubmit={handleSubmit}>
 
                 <div className="flex flex-col mx-auto justify-center items-center mb-4">
                     <label htmlFor="title" className="text-lg mb-2">Treniņa nosaukums</label>
-                    <input type="text" value={formData.title} onChange={handleChange} name="title" id="title" className="p-3 w-1/3 rounded border border-gray-300 outline-primary"/>
+                    <input type="text" value={formData.title} onChange={handleChange} name="title" id="title" className="p-3 w-2/3 rounded border border-gray-300 outline-primary"/>
                 </div>
 
                 <div className="flex flex-col mx-auto justify-center items-center mb-4">
@@ -123,7 +123,7 @@ const CreateTrainingPage = ({type, user}: CreateTrainingProps) => {
                         </label>
                         <label>
                             <input type="radio" value={120} name="time" checked={formData.time === 120} onChange={handleChange} className="peer hidden"/>
-                            <span className="block my-1 tect-center peer-checked:bg-primary peer-checked:text-white border border-primary px-4 py-2 rounded">2 minūtes</span>
+                            <span className="block my-1 text-center peer-checked:bg-primary peer-checked:text-white border border-primary px-4 py-2 rounded">2 minūtes</span>
                         </label>
                     </div>
                 </div>
@@ -134,25 +134,25 @@ const CreateTrainingPage = ({type, user}: CreateTrainingProps) => {
                     <div className="flex flex-row gap-2 mt-2 text-xl">
                         <label>
                             <input type="checkbox" checked={formData.operations.includes("+")} onChange={() => toggleOperation("+")} className="peer hidden"/>
-                            <span className="peer-checked:bg-primary peer-checked:text-white border border-primary px-4 py-2 rounded">+</span>
+                            <span className="peer-checked:bg-primary w-12 text-center inline-block peer-checked:text-white border border-primary px-4 py-2 rounded">+</span>
                         </label>
                         <label>
                             <input type="checkbox" checked={formData.operations.includes("-")} onChange={() => toggleOperation("-")} className="peer hidden"/>
-                            <span className="peer-checked:bg-primary peer-checked:text-white border border-primary px-4 py-2 rounded">-</span>
+                            <span className="peer-checked:bg-primary w-12 text-center inline-block peer-checked:text-white border border-primary px-4 py-2 rounded">-</span>
                         </label>
                         <label>
                             <input type="checkbox" checked={formData.operations.includes("*")} onChange={() => toggleOperation("*")} className="peer hidden"/>
-                            <span className="peer-checked:bg-primary peer-checked:text-white border border-primary px-4 py-2 rounded">×</span>
+                            <span className="peer-checked:bg-primary w-12 text-center inline-block peer-checked:text-white border border-primary px-4 py-2 rounded">×</span>
                         </label>
                         <label>
                             <input type="checkbox" checked={formData.operations.includes("/")} onChange={() => toggleOperation("/")} className="peer hidden"/>
-                            <span className="peer-checked:bg-primary peer-checked:text-white border border-primary px-4 py-2 rounded">÷</span>
+                            <span className="peer-checked:bg-primary w-12 text-center inline-block peer-checked:text-white border border-primary px-4 py-2 rounded">÷</span>
                         </label>
                     </div>
                 </div>
 
                 <div className="flex justify-center">
-                    <button type="submit" className="text-white text-lg font-semibold bg-primary p-3 rounded w-1/3 mt-4">Sākt treniņu</button>
+                    <button type="submit" className="text-white text-lg font-semibold bg-primary p-3 rounded w-2/3 md:w-1/3 mt-4">Sākt treniņu</button>
                 </div>
 
                 {error && <p>{error}</p>}

@@ -84,28 +84,41 @@ const ResultsPage = () => {
     }, [tasks]);
 
     return (
-        <div>
+        <div className="max-w-2xl mx-auto bg-bg p-5 min-h-screen md:min-h-0 shadow-md rounded">
+            <h1 className="text-3xl text-primary text-center font-bold">Rezultāti</h1>
+
             {result &&
-                <div>
-                    <div>
-                        <p>Punkti: {result.score}</p>
-                        <p>Precizitāte: {result.accuracy}%</p>
-                        <p>Vidējais laiks: {result.average_time.toFixed(2)}</p>
+                <div className="mt-5 text-lg">
+                    <div className="mb-5 flex flex-row justify-stretch gap-1">
+                        <div className="border border-gray-400 rounded w-1/3">
+                            <p className="text-4xl text-center font-bold text-primary mt-1">{result.score}</p>
+                            <p className="text-base text-center my-2">punkti</p>
+                        </div>
+
+                        <div className="border border-gray-400 rounded w-1/3">
+                            <p className="text-4xl text-center font-bold text-primary mt-1">{result.accuracy}%</p>
+                            <p className="text-base text-center my-2">precizitāte</p>
+                        </div>
+
+                        <div className="border border-gray-400 rounded w-1/3">
+                            <p className="text-4xl text-center font-bold text-primary mt-1">{result.average_time.toFixed(2)}<span className="text-3xl">s.</span></p>
+                            <p className="text-base text-center my-2">vidējais laiks</p>
+                        </div>
                     </div>
 
-                    <div>
-                        <button onClick={() => setShowTasks(true)}>Paskatīties manas kļūdas</button>
+                    <div className="flex flex-col justify-center items-center mt-5">
+                        <button onClick={() => setShowTasks((prev) => !prev)} className="border border-primary rounded p-3">Paskatīties manas kļūdas</button>
 
                         {showTasks &&
-                            <div>
+                            <div className="mt-5">
                                 {tasks
                                     .filter(t => answers[t.task_id])
                                     .map((t) => {
                                     const answer = answers[t.task_id];
                                     return (
                                         <p key={t.task_id}>
-                                            {t.first_num} {t.operation} {t.second_num} = <span className="line-through">{answer?.answer}</span>
-                                            <span>{getCorrect(t)}</span>
+                                            {t.first_num} {t.operation} {t.second_num} = <span className="line-through text-danger mr-3">{answer?.answer}</span>
+                                            <span className="text-success">{getCorrect(t)}</span>
                                         </p>
                                     )
                                 })}
@@ -115,7 +128,9 @@ const ResultsPage = () => {
                 </div>
             }
 
-            <Link to="/dashboard">Atpakaļ uz dashboard</Link>
+            <div className="flex justify-center mt-5">
+                <Link to="/dashboard" className="text-primary font-semibold">Atpakaļ uz sākumlapu</Link>
+            </div>
 
             {error && <p>{error}</p>}
         </div>

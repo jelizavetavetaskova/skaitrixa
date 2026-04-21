@@ -6,6 +6,7 @@ import type {GeneratedTask} from "../shared/types/app.ts";
 import {generateTask} from "../features/game/utils/generateTask.ts";
 import Timer from "../features/game/components/Timer.tsx";
 import Keyboard from "../features/game/components/Keyboard.tsx";
+import {Check, Pause, Play, X} from "lucide-react";
 
 type SavedAnswer = {
     answer: number;
@@ -28,6 +29,8 @@ const GamePage = ({user}: GameProps) => {
     const [currentTask, setCurrentTask] = useState<GeneratedTask|null>(null);
     const [answer, setAnswer] = useState("");
 
+    const [isPaused, setIsPaused] = useState(false);
+
     const [isBlocked, setIsBlocked] = useState(false);
 
     const [correct, setCorrect] = useState(0);
@@ -45,12 +48,12 @@ const GamePage = ({user}: GameProps) => {
         const taskId = await saveTask();
 
         if (Number(answer) == currentTask?.correct) {
-            setText("✔")
+            setText("correct")
             correctRef.current += 1;
             setCorrect((c)=> c + 1);
         }
         else {
-            setText("❌");
+            setText("incorrect");
             mistakesRef.current += 1
             setMistakes((m) => m + 1);
         }
@@ -171,11 +174,32 @@ const GamePage = ({user}: GameProps) => {
     }, [training_id]);
 
     return (
-        <div>
-            <p>{currentTask?.firstNum} {currentTask?.operation} {currentTask?.secondNum} = {answer} {text && text}</p>
+        <div className="max-w-md mx-auto bg-bg p-5 min-h-screen md:min-h-0 shadow-md rounded">
+            <div className="flex justify-between items-center mx-6 mb-3 md:justify-center md:gap-20">
+                {training && <Timer seconds={training.time} onTimeUp={endGame} isPaused={isPaused}/>}
 
-            {training && <Timer seconds={training.time} onTimeUp={endGame} />}
-            <p>Correct: {correct}, mistakes: {mistakes}</p>
+                <div className="flex flex-row gap-15">
+                    <span className="text-success font-semibold text-3xl">{correct}</span>
+                    <span className="text-danger font-semibold text-3xl">{mistakes}</span>
+                </div>
+
+                <button onClick={() => {
+                    setIsBlocked((prev) => !prev);
+                    setIsPaused((prev) => !prev);
+                }}>
+                    {isPaused ? <Play size={40} /> : <Pause size={40} />}
+                </button>
+            </div>
+
+            <div className="mx-3 flex flex-row items-center justify-center mt-5">
+                <div className="flex items-center justify-center gap-3 mt-5 text-5xl font-bold">
+                    <span>{currentTask?.firstNum} {currentTask?.operation} {currentTask?.secondNum} =</span>
+                    <span className="text-primary">{answer}</span>
+                    {text === "correct" && <Check size={45} className="text-success" />}
+                    {text === "incorrect" && <X size={45} className="text-danger" />}
+                </div>
+            </div>
+
             <Keyboard
                 onInput={(d) => setAnswer((prev) => prev.concat(d))}
                 onDelete={handleDelete}
