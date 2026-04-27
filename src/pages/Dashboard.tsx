@@ -2,6 +2,7 @@ import {useNavigate} from "react-router-dom";
 import type {Result, Training, User} from "../shared/types/database.ts";
 import {supabase} from "../lib/supabase.ts";
 import {useEffect, useState} from "react";
+import PageCard from "../shared/components/PageCard.tsx";
 
 interface DashboardProps {
     user: User | null;
@@ -76,11 +77,10 @@ const Dashboard = ({user}: DashboardProps) => {
         getLast();
     }, [user?.user_id]);
 
-    return (
-        <div className="max-w-5xl mx-auto bg-bg p-5 min-h-screen md:min-h-0 shadow-md rounded pb-10">
-            {error && <p className="text-danger">{error}</p>}
+    // Sveik{(user?.name.endsWith("a") || user?.name.endsWith("e")) ? "a" : "s"}, {user?.name}!
 
-            <h1 className="text-3xl text-primary text-center font-bold">Sveik{(user?.name.endsWith("a") || user?.name.endsWith("e")) ? "a" : "s"}, {user?.name}!</h1>
+    return (
+        <PageCard title={`Sveik${(user?.name.endsWith("a") || user?.name.endsWith("e")) ? "a" : "s"}, ${user?.name}!`}>
 
             <div className="flex justify-center mt-7">
                 <button
@@ -117,7 +117,7 @@ const Dashboard = ({user}: DashboardProps) => {
                     </ol>
                 </div>
             </div>
-        </div>
+        </PageCard>
     )
 }
 

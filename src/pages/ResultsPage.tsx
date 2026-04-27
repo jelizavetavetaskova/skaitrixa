@@ -2,6 +2,7 @@ import {Link, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import type {Answer, Result, Task} from "../shared/types/database.ts";
 import {supabase} from "../lib/supabase.ts";
+import PageCard from "../shared/components/PageCard.tsx";
 
 const ResultsPage = () => {
 
@@ -84,8 +85,7 @@ const ResultsPage = () => {
     }, [tasks]);
 
     return (
-        <div className="max-w-2xl mx-auto bg-bg p-5 min-h-screen md:min-h-0 shadow-md rounded">
-            <h1 className="text-3xl text-primary text-center font-bold">Rezultāti</h1>
+        <PageCard title="Rezultāti">
 
             {result &&
                 <div className="mt-5 text-lg">
@@ -133,7 +133,7 @@ const ResultsPage = () => {
             </div>
 
             {error && <p>{error}</p>}
-        </div>
+        </PageCard>
     )
 }
 
