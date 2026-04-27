@@ -7,21 +7,18 @@ import Dashboard from "../pages/Dashboard.tsx";
 import CreateTrainingPage from "../features/training/CreateTrainingPage.tsx";
 import GamePage from "../pages/GamePage.tsx";
 import ResultsPage from "../pages/ResultsPage.tsx";
-import Navbar from "../shared/layouts/Navbar.tsx";
 import HomePage from "../pages/HomePage.tsx";
 import Layout from "../shared/layouts/Layout.tsx";
 
 interface RouterProps {
     user: User | null;
-    loading: boolean;
 }
 
 const RouterComponent = ({user}: RouterProps) => {
     return (
         <BrowserRouter>
-            <Navbar user={user} />
             <Routes>
-                <Route element={<Layout />}>
+                <Route element={<Layout user={user}/>}>
                     <Route path="/" element={
                         <HomePage user={user} />
                     } />
