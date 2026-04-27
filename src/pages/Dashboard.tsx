@@ -3,6 +3,7 @@ import type {Result, Training, User} from "../shared/types/database.ts";
 import {supabase} from "../lib/supabase.ts";
 import {useEffect, useState} from "react";
 import PageCard from "../shared/components/PageCard.tsx";
+import InfoCard from "../features/dashboard/components/InfoCard.tsx";
 
 interface DashboardProps {
     user: User | null;
@@ -77,8 +78,6 @@ const Dashboard = ({user}: DashboardProps) => {
         getLast();
     }, [user?.user_id]);
 
-    // Sveik{(user?.name.endsWith("a") || user?.name.endsWith("e")) ? "a" : "s"}, {user?.name}!
-
     return (
         <PageCard title={`Sveik${(user?.name.endsWith("a") || user?.name.endsWith("e")) ? "a" : "s"}, ${user?.name}!`}>
 
@@ -92,8 +91,7 @@ const Dashboard = ({user}: DashboardProps) => {
             </div>
 
             <div className="flex flex-col md:flex-row mt-7 items-center justify-center gap-5 md:mx-15 md:items-stretch">
-                <div className="border border-gray-400 rounded p-5 w-4/5">
-                    <h2 className="text-2xl text-primary text-center font-semibold mb-3">Pārbaudes darbi</h2>
+                <InfoCard title="Pārbaudes darbi">
                     <ul>
                         {tests && tests.length > 0 ?
                             tests.map((test) => (
@@ -102,20 +100,18 @@ const Dashboard = ({user}: DashboardProps) => {
                         :
                         <p>Nav pārbaudes darbu</p>}
                     </ul>
-                </div>
+                </InfoCard>
 
-                <div className="border border-gray-400 rounded p-5 w-4/5">
-                    <h2 className="text-2xl text-primary text-center font-semibold mb-3">Mans progress</h2>
+                <InfoCard title="Mans progress">
                     <p>Labākais rezultāts: {bestResult ? bestResult.score : 0} punkti</p>
                     <p>Pēdējais rezultāts: {lastResult ? lastResult.score : 0} punkti</p>
-                </div>
+                </InfoCard>
 
-                <div className="border border-gray-400 rounded p-5 w-4/5">
-                    <h2 className="text-2xl text-primary text-center font-semibold mb-3">Reitings</h2>
+                <InfoCard title="Reitings">
                     <ol>
 
                     </ol>
-                </div>
+                </InfoCard>
             </div>
         </PageCard>
     )
