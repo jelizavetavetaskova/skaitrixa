@@ -2,6 +2,8 @@ import {Link, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import type {Answer, Result, Task} from "../shared/types/database.ts";
 import {supabase} from "../lib/supabase.ts";
+import PageCard from "../shared/components/PageCard.tsx";
+import StatCard from "../features/results/components/StatCard.tsx";
 
 const ResultsPage = () => {
 
@@ -84,26 +86,17 @@ const ResultsPage = () => {
     }, [tasks]);
 
     return (
-        <div className="max-w-2xl mx-auto bg-bg p-5 min-h-screen md:min-h-0 shadow-md rounded">
-            <h1 className="text-3xl text-primary text-center font-bold">Rezultāti</h1>
+        <PageCard title="Rezultāti">
 
             {result &&
                 <div className="mt-5 text-lg">
                     <div className="mb-5 flex flex-row justify-stretch gap-1">
-                        <div className="border border-gray-400 rounded w-1/3">
-                            <p className="text-4xl text-center font-bold text-primary mt-1">{result.score}</p>
-                            <p className="text-base text-center my-2">punkti</p>
-                        </div>
+                        <StatCard number={result.score} label="punkti"/>
 
-                        <div className="border border-gray-400 rounded w-1/3">
-                            <p className="text-4xl text-center font-bold text-primary mt-1">{result.accuracy}%</p>
-                            <p className="text-base text-center my-2">precizitāte</p>
-                        </div>
+                        <StatCard number={result.accuracy} label="precizitāte" unit="%"/>
 
-                        <div className="border border-gray-400 rounded w-1/3">
-                            <p className="text-4xl text-center font-bold text-primary mt-1">{result.average_time.toFixed(2)}<span className="text-3xl">s.</span></p>
-                            <p className="text-base text-center my-2">vidējais laiks</p>
-                        </div>
+                        <StatCard number={Number(result.average_time.toFixed(2))} unit="s." label="Vidējais laiks"/>
+
                     </div>
 
                     <div className="flex flex-col justify-center items-center mt-5">
@@ -133,7 +126,7 @@ const ResultsPage = () => {
             </div>
 
             {error && <p>{error}</p>}
-        </div>
+        </PageCard>
     )
 }
 

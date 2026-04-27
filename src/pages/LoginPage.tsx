@@ -2,6 +2,7 @@ import {useEffect, useState} from "react";
 import {useAuth} from "../features/auth/hooks/useAuth.ts";
 import type {AuthError} from "@supabase/supabase-js";
 import {Link, useNavigate} from "react-router-dom";
+import PageCard from "../shared/components/PageCard.tsx";
 
 const LoginPage = () => {
     const [email, setEmail] = useState("");
@@ -20,8 +21,7 @@ const LoginPage = () => {
     }, [navigate, user]);
 
     return (
-        <div className="max-w-md mx-auto bg-bg p-5 min-h-screen md:min-h-0 shadow-md rounded">
-            <h1 className="text-3xl text-primary font-bold text-center pb-6">Autorizācija</h1>
+        <PageCard title="Autentifikācija" width="max-w-md">
 
             <form onSubmit={async (e) => {
                 e.preventDefault();
@@ -59,7 +59,7 @@ const LoginPage = () => {
                 <p>Autorizēties ar Google</p>
                 <p>Vēl nav konta? <Link to="/register" className="text-primary font-semibold">Izveidot kontu</Link></p>
             </div>
-        </div>
+        </PageCard>
     )
 
 }

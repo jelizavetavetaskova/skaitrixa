@@ -1,6 +1,7 @@
 import {type ChangeEvent, useState, type SubmitEvent} from "react";
 import {supabase} from "../lib/supabase.ts";
 import {Link, useNavigate} from "react-router-dom";
+import PageCard from "../shared/components/PageCard.tsx";
 
 const RegisterPage = () => {
     const [formData, setFormData] = useState({
@@ -60,8 +61,7 @@ const RegisterPage = () => {
     }
 
     return (
-        <div className="max-w-md mx-auto bg-bg p-5 min-h-screen md:min-h-0 shadow-md rounded">
-            <h1 className="text-3xl text-primary font-bold text-center pb-6">Reģistrācija</h1>
+        <PageCard title="Reģistrācija" width="max-w-xl">
 
             <form onSubmit={handleSubmit}>
                 <div className="flex flex-col mx-auto justify-center items-center mb-4">
@@ -94,7 +94,7 @@ const RegisterPage = () => {
                 <p className="mx-auto text-lg mb-2">Jau ir konts? <Link to="/login" className="text-primary font-semibold">Autorizēties</Link></p>
                 {error && <p className="text-danger">{error}</p>}
             </div>
-        </div>
+        </PageCard>
     )
 }
 
