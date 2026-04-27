@@ -2,6 +2,7 @@ import {type ChangeEvent, type SubmitEvent, useState} from "react";
 import {supabase} from "../../lib/supabase.ts";
 import type {User} from "../../shared/types/database.ts";
 import {useNavigate} from "react-router-dom";
+import Button from "../../shared/components/Button.tsx";
 
 interface CreateTrainingProps {
     type: string;
@@ -152,7 +153,7 @@ const CreateTrainingPage = ({type, user}: CreateTrainingProps) => {
                 </div>
 
                 <div className="flex justify-center">
-                    <button type="submit" className="text-white text-lg font-semibold bg-primary p-3 rounded w-2/3 md:w-1/3 mt-4">Sākt treniņu</button>
+                    <Button type="submit" variant="primary">Sākt treniņu</Button>
                 </div>
 
                 {error && <p>{error}</p>}

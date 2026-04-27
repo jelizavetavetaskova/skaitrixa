@@ -72,7 +72,7 @@ const Navbar = ({user}: NavbarProps) => {
                 </div>
                 :
                 <div>
-                    <Link to="/login" className="text-lg font-semibold">Autorizēties</Link>
+                    <Link to="/login" className="text-lg font-semibold">Autentificēties</Link>
                 </div>
             }
 

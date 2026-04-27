@@ -2,6 +2,7 @@ import {type ChangeEvent, useState, type SubmitEvent} from "react";
 import {supabase} from "../lib/supabase.ts";
 import {Link, useNavigate} from "react-router-dom";
 import PageCard from "../shared/components/PageCard.tsx";
+import Button from "../shared/components/Button.tsx";
 
 const RegisterPage = () => {
     const [formData, setFormData] = useState({
@@ -86,7 +87,7 @@ const RegisterPage = () => {
                 </div>
 
                 <div className="flex justify-center">
-                    <button type="submit" className="text-white text-lg font-semibold bg-primary p-3 rounded w-2/3 cursor-pointer">Izveidot kontu</button>
+                    <Button type="submit" variant="primary">Izveidot kontu</Button>
                 </div>
             </form>
 

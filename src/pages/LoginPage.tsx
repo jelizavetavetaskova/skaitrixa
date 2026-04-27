@@ -3,6 +3,7 @@ import {useAuth} from "../features/auth/hooks/useAuth.ts";
 import type {AuthError} from "@supabase/supabase-js";
 import {Link, useNavigate} from "react-router-dom";
 import PageCard from "../shared/components/PageCard.tsx";
+import Button from "../shared/components/Button.tsx";
 
 const LoginPage = () => {
     const [email, setEmail] = useState("");
@@ -48,8 +49,9 @@ const LoginPage = () => {
                         className="p-3 w-2/3 rounded border border-gray-300 outline-primary"
                     />
                 </div>
+
                 <div className="flex justify-center">
-                    <button type="submit" className="text-white text-lg font-semibold bg-primary p-3 rounded w-2/3">Autorizēties</button>
+                    <Button type="submit" variant="primary">Ieiet</Button>
                 </div>
 
                 {error && <p>{error.message}</p>}
