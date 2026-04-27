@@ -9,6 +9,7 @@ import GamePage from "../pages/GamePage.tsx";
 import ResultsPage from "../pages/ResultsPage.tsx";
 import Navbar from "../shared/layouts/Navbar.tsx";
 import HomePage from "../pages/HomePage.tsx";
+import Layout from "../shared/layouts/Layout.tsx";
 
 interface RouterProps {
     user: User | null;
@@ -20,70 +21,72 @@ const RouterComponent = ({user}: RouterProps) => {
         <BrowserRouter>
             <Navbar user={user} />
             <Routes>
-                <Route path="/" element={
-                    <HomePage user={user} />
-                } />
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/register" element={<RegisterPage />} />
+                <Route element={<Layout />}>
+                    <Route path="/" element={
+                        <HomePage user={user} />
+                    } />
+                    <Route path="/login" element={<LoginPage />} />
+                    <Route path="/register" element={<RegisterPage />} />
 
-                {/* SKOLĒNS */}
-                <Route path="/dashboard" element={
-                    <ProtectedRoute user={user} roles={["student"]}>
-                        <Dashboard user={user}/>
-                    </ProtectedRoute>
-                } />
+                    {/* SKOLĒNS */}
+                    <Route path="/dashboard" element={
+                        <ProtectedRoute user={user} roles={["student"]}>
+                            <Dashboard user={user}/>
+                        </ProtectedRoute>
+                    } />
 
 
-                <Route path="/student/training/create" element={
-                    <ProtectedRoute user={user} roles={["student"]}>
-                        <CreateTrainingPage user={user} type="training" />
-                    </ProtectedRoute>
-                } />
+                    <Route path="/student/training/create" element={
+                        <ProtectedRoute user={user} roles={["student"]}>
+                            <CreateTrainingPage user={user} type="training" />
+                        </ProtectedRoute>
+                    } />
 
-                <Route path="/game/:training_id" element={
-                    <ProtectedRoute user={user} roles={["student"]}>
-                        <GamePage user={user}/>
-                    </ProtectedRoute>
-                } />
+                    <Route path="/game/:training_id" element={
+                        <ProtectedRoute user={user} roles={["student"]}>
+                            <GamePage user={user}/>
+                        </ProtectedRoute>
+                    } />
 
-                <Route path="/student/results/:result_id" element={
-                    <ProtectedRoute user={user} roles={["student"]}>
-                        <ResultsPage />
-                    </ProtectedRoute>
-                } />
+                    <Route path="/student/results/:result_id" element={
+                        <ProtectedRoute user={user} roles={["student"]}>
+                            <ResultsPage />
+                        </ProtectedRoute>
+                    } />
 
-                {/* SKOLOTĀJS */}
-                <Route path="/teacher" element={
-                    <ProtectedRoute user={user} roles={["teacher"]}>
-                        <h1>Skolotāja lapa</h1>
-                    </ProtectedRoute>
-                } />
+                    {/* SKOLOTĀJS */}
+                    <Route path="/teacher" element={
+                        <ProtectedRoute user={user} roles={["teacher"]}>
+                            <h1>Skolotāja lapa</h1>
+                        </ProtectedRoute>
+                    } />
 
-                <Route path="/teacher/test/create" element={
-                    <ProtectedRoute user={user} roles={["teacher"]}>
-                        <h1>Izveidot kontroldarbu</h1>
-                    </ProtectedRoute>
-                } />
+                    <Route path="/teacher/test/create" element={
+                        <ProtectedRoute user={user} roles={["teacher"]}>
+                            <h1>Izveidot kontroldarbu</h1>
+                        </ProtectedRoute>
+                    } />
 
-                <Route path="/teacher/results" element={
-                    <ProtectedRoute user={user} roles={["teacher"]}>
-                        <h1>Skolēnu rezultāti</h1>
-                    </ProtectedRoute>
-                } />
+                    <Route path="/teacher/results" element={
+                        <ProtectedRoute user={user} roles={["teacher"]}>
+                            <h1>Skolēnu rezultāti</h1>
+                        </ProtectedRoute>
+                    } />
 
-                {/* ADMIN */}
-                <Route path="/admin" element={
-                    <ProtectedRoute user={user} roles={["admin"]}>
-                        <h1>Admin lapa</h1>
-                    </ProtectedRoute>
-                } />
+                    {/* ADMIN */}
+                    <Route path="/admin" element={
+                        <ProtectedRoute user={user} roles={["admin"]}>
+                            <h1>Admin lapa</h1>
+                        </ProtectedRoute>
+                    } />
 
-                {/* ielogotie lietotāji */}
-                <Route path="/profile" element={
-                    <ProtectedRoute user={user} roles={["teacher", "student", "admin"]}>
-                        <h1>Profils</h1>
-                    </ProtectedRoute>
-                } />
+                    {/* ielogotie lietotāji */}
+                    <Route path="/profile" element={
+                        <ProtectedRoute user={user} roles={["teacher", "student", "admin"]}>
+                            <h1>Profils</h1>
+                        </ProtectedRoute>
+                    } />
+                </Route>
             </Routes>
         </BrowserRouter>
     )
