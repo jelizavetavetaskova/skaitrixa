@@ -3,6 +3,7 @@ import {supabase} from "../../lib/supabase.ts";
 import type {User} from "../../shared/types/database.ts";
 import {useNavigate} from "react-router-dom";
 import Button from "../../shared/components/Button.tsx";
+import LabeledInput from "../../shared/components/LabeledInput.tsx";
 
 interface CreateTrainingProps {
     type: string;
@@ -86,10 +87,7 @@ const CreateTrainingPage = ({type, user}: CreateTrainingProps) => {
 
             <form onSubmit={handleSubmit}>
 
-                <div className="flex flex-col mx-auto justify-center items-center mb-4">
-                    <label htmlFor="title" className="text-lg mb-2">Treniņa nosaukums</label>
-                    <input type="text" value={formData.title} onChange={handleChange} name="title" id="title" className="p-3 w-2/3 rounded border border-gray-300 outline-primary"/>
-                </div>
+                <LabeledInput label="Treniņa nosaukums:" value={formData.title} name="title" onChange={handleChange} required={false} placeholder="Treniņš"/>
 
                 <div className="flex flex-col mx-auto justify-center items-center mb-4">
                     <p className="text-lg mb-2">Līmenis:</p>
