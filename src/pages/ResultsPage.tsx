@@ -91,13 +91,10 @@ const ResultsPage = () => {
 
             {result &&
                 <div className="mt-5 text-lg">
-                    <div className="mb-5 flex flex-row justify-stretch gap-1">
+                    <div className="mb-5 flex flex-col md:flex-row md:justify-stretch md:gap-4 items-center">
                         <StatCard number={result.score} label="punkti"/>
-
                         <StatCard number={result.accuracy} label="precizitāte" unit="%"/>
-
-                        <StatCard number={Number(result.average_time.toFixed(2))} unit="s." label="Vidējais laiks"/>
-
+                        <StatCard number={Number(result.average_time.toFixed(2))} unit="s." label="vidējais laiks"/>
                     </div>
 
                     <div className="flex flex-col justify-center items-center mt-5">

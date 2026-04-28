@@ -82,7 +82,7 @@ const Dashboard = ({user}: DashboardProps) => {
     return (
         <PageCard title={`Sveik${(user?.name.endsWith("a") || user?.name.endsWith("e")) ? "a" : "s"}, ${user?.name}!`}>
 
-            <div className="flex justify-center mt-7">
+            <div className="flex justify-center mt-5">
                 <LinkButton to="/student/training/create" variant="success">Sākt spēli</LinkButton>
             </div>
 
