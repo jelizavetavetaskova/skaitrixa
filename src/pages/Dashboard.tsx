@@ -1,9 +1,10 @@
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import type {Result, Training, User} from "../shared/types/database.ts";
 import {supabase} from "../lib/supabase.ts";
 import {useEffect, useState} from "react";
 import PageCard from "../shared/components/PageCard.tsx";
 import InfoCard from "../features/dashboard/components/InfoCard.tsx";
+import LinkButton from "../shared/components/LinkButton.tsx";
 
 interface DashboardProps {
     user: User | null;
@@ -81,13 +82,8 @@ const Dashboard = ({user}: DashboardProps) => {
     return (
         <PageCard title={`Sveik${(user?.name.endsWith("a") || user?.name.endsWith("e")) ? "a" : "s"}, ${user?.name}!`}>
 
-            <div className="flex justify-center mt-7">
-                <button
-                    onClick={() => navigate("/student/training/create")}
-                    className="bg-green-700 text-white px-15 py-5 rounded text-xl font-bold cursor-pointer"
-                >
-                    Sākt spēli
-                </button>
+            <div className="flex justify-center mt-5">
+                <LinkButton to="/student/training/create" variant="success">Sākt spēli</LinkButton>
             </div>
 
             <div className="flex flex-col md:flex-row mt-7 items-center justify-center gap-5 md:mx-15 md:items-stretch">

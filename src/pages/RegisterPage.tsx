@@ -2,6 +2,8 @@ import {type ChangeEvent, useState, type SubmitEvent} from "react";
 import {supabase} from "../lib/supabase.ts";
 import {Link, useNavigate} from "react-router-dom";
 import PageCard from "../shared/components/PageCard.tsx";
+import Button from "../shared/components/Button.tsx";
+import LabeledInput from "../shared/components/LabeledInput.tsx";
 
 const RegisterPage = () => {
     const [formData, setFormData] = useState({
@@ -64,29 +66,14 @@ const RegisterPage = () => {
         <PageCard title="Reģistrācija" width="max-w-xl">
 
             <form onSubmit={handleSubmit}>
-                <div className="flex flex-col mx-auto justify-center items-center mb-4">
-                    <label htmlFor="name" className="text-lg mb-2">Vārds:</label>
-                    <input type="text" name="name" id="name" value={formData.name} onChange={handleChange} className="p-3 w-2/3 rounded border border-gray-300 outline-primary"/>
-                </div>
-                <div className="flex flex-col mx-auto justify-center items-center mb-4">
-                    <label htmlFor="surname" className="text-lg mb-2">Uzvārds:</label>
-                    <input type="text" name="surname" id="surname" value={formData.surname} onChange={handleChange} className="p-3 w-2/3 rounded border border-gray-300 outline-primary"/>
-                </div>
-                <div className="flex flex-col mx-auto justify-center items-center mb-4">
-                    <label htmlFor="email" className="text-lg mb-2">E-pasts:</label>
-                    <input type="email" name="email" id="email" value={formData.email} onChange={handleChange} className="p-3 w-2/3 rounded border border-gray-300 outline-primary"/>
-                </div>
-                <div className="flex flex-col mx-auto justify-center items-center mb-4">
-                    <label htmlFor="password" className="text-lg mb-2">Parole:</label>
-                    <input type="password" name="password" id="password" value={formData.password} onChange={handleChange} className="p-3 w-2/3 rounded border border-gray-300 outline-primary"/>
-                </div>
-                <div className="flex flex-col mx-auto justify-center items-center mb-4">
-                    <label htmlFor="confirm" className="text-lg mb-2">Apstiprināt paroli:</label>
-                    <input type="password" name="confirm" id="confirm" value={formData.confirm} onChange={handleChange} className="p-3 w-2/3 rounded border border-gray-300 outline-primary"/>
-                </div>
+                <LabeledInput label="Vārds:" name="name" value={formData.name} onChange={handleChange} required={true} placeholder="Anna"/>
+                <LabeledInput label="Uzvārds:" value={formData.surname} name="surname" onChange={handleChange} required={true} placeholder="Zelta"/>
+                <LabeledInput type="email" label="E-pasts:" value={formData.email} name="email" onChange={handleChange} required={true} placeholder="anna_zelta@example.com"/>
+                <LabeledInput type="password" label="Parole:" value={formData.password} name="password" onChange={handleChange} required={true}/>
+                <LabeledInput type="password" label="Apstiprināt paroli:" value={formData.confirm} name="confirm" onChange={handleChange} required={true} />
 
                 <div className="flex justify-center">
-                    <button type="submit" className="text-white text-lg font-semibold bg-primary p-3 rounded w-2/3 cursor-pointer">Izveidot kontu</button>
+                    <Button type="submit" variant="primary">Izveidot kontu</Button>
                 </div>
             </form>
 

@@ -2,18 +2,39 @@ import {type ChangeEvent, type SubmitEvent, useState} from "react";
 import {supabase} from "../../lib/supabase.ts";
 import type {User} from "../../shared/types/database.ts";
 import {useNavigate} from "react-router-dom";
+import Button from "../../shared/components/Button.tsx";
+import LabeledInput from "../../shared/components/LabeledInput.tsx";
 
 interface CreateTrainingProps {
     type: string;
     user: User | null;
 }
 
+const levelOptions = [
+    {value: "easy", label: "Viegls"},
+    {value: "medium", label: "Vidējs"},
+    {value: "hard", label: "Grūts"}
+]
+
+const timeOptions = [
+    {value: 30, label: "30 sekundes"},
+    {value: 60, label: "1 minūte"},
+    {value: 120, label: "2 minūtes"}
+]
+
+const operations = [
+    {value: "+", label: "+"},
+    {value: "-", label: "-"},
+    {value: "*", label: "×"},
+    {value: "/", label: "÷"}
+]
+
 const CreateTrainingPage = ({type, user}: CreateTrainingProps) => {
     const [formData, setFormData] = useState<{title: string, level: string, operations: string[], time: number}>({
         title: "",
         level: "easy",
         operations: [],
-        time: 0,
+        time: 30,
     })
 
     const [error, setError] = useState("");
@@ -64,7 +85,7 @@ const CreateTrainingPage = ({type, user}: CreateTrainingProps) => {
             title: "",
             level: "easy",
             operations: [],
-            time: 0,
+            time: 30,
         });
 
         if (type === "training") await startGame();
@@ -85,27 +106,18 @@ const CreateTrainingPage = ({type, user}: CreateTrainingProps) => {
 
             <form onSubmit={handleSubmit}>
 
-                <div className="flex flex-col mx-auto justify-center items-center mb-4">
-                    <label htmlFor="title" className="text-lg mb-2">Treniņa nosaukums</label>
-                    <input type="text" value={formData.title} onChange={handleChange} name="title" id="title" className="p-3 w-2/3 rounded border border-gray-300 outline-primary"/>
-                </div>
+                <LabeledInput label="Treniņa nosaukums:" value={formData.title} name="title" onChange={handleChange} required={false} placeholder="Treniņš"/>
 
                 <div className="flex flex-col mx-auto justify-center items-center mb-4">
                     <p className="text-lg mb-2">Līmenis:</p>
 
                     <div className="flex flex-row gap-2 my-2">
-                        <label>
-                            <input type="radio" value="easy" name="level" checked={formData.level === "easy"} onChange={handleChange} className="peer hidden"/>
-                            <span className="peer-checked:bg-primary peer-checked:text-white border border-primary px-4 py-2 rounded">Viegls</span>
+                        {levelOptions.map((level) => (
+                        <label key={level.value}>
+                            <input type="radio" value={level.value} name="level" checked={formData.level === level.value} onChange={handleChange} className="peer hidden"/>
+                            <span className="peer-checked:bg-primary peer-checked:text-white border border-primary px-4 py-2 rounded">{level.label}</span>
                         </label>
-                        <label>
-                            <input type="radio" value="medium" name="level" checked={formData.level === "medium"} onChange={handleChange} className="peer hidden"/>
-                            <span className="peer-checked:bg-primary peer-checked:text-white border border-primary px-4 py-2 rounded">Vidējs</span>
-                        </label>
-                        <label>
-                            <input type="radio" value="hard" name="level" checked={formData.level === "hard"} onChange={handleChange} className="peer hidden"/>
-                            <span className="peer-checked:bg-primary peer-checked:text-white border border-primary px-4 py-2 rounded">Grūts</span>
-                        </label>
+                        ))}
                     </div>
                 </div>
 
@@ -113,18 +125,12 @@ const CreateTrainingPage = ({type, user}: CreateTrainingProps) => {
                     <p className="text-lg mb-2">Laiks:</p>
 
                     <div className="flex flex-col md:flex-row md:gap-2">
-                        <label>
-                            <input type="radio" value={30} name="time" checked={formData.time === 30} onChange={handleChange} className="peer hidden"/>
-                            <span className="block my-1 text-center peer-checked:bg-primary peer-checked:text-white border border-primary px-4 py-2 rounded">30 sekundes</span>
+                        {timeOptions.map((time) => (
+                        <label key={time.value}>
+                            <input type="radio" value={time.value} name="time" checked={formData.time === time.value} onChange={handleChange} className="peer hidden"/>
+                            <span className="block my-1 text-center peer-checked:bg-primary peer-checked:text-white border border-primary px-4 py-2 rounded">{time.label}</span>
                         </label>
-                        <label>
-                            <input type="radio" value={60} name="time" checked={formData.time === 60} onChange={handleChange} className="peer hidden"/>
-                            <span className="block my-1 text-center peer-checked:bg-primary peer-checked:text-white border border-primary px-4 py-2 rounded">1 minūte</span>
-                        </label>
-                        <label>
-                            <input type="radio" value={120} name="time" checked={formData.time === 120} onChange={handleChange} className="peer hidden"/>
-                            <span className="block my-1 text-center peer-checked:bg-primary peer-checked:text-white border border-primary px-4 py-2 rounded">2 minūtes</span>
-                        </label>
+                        ))}
                     </div>
                 </div>
 
@@ -132,27 +138,17 @@ const CreateTrainingPage = ({type, user}: CreateTrainingProps) => {
                     <p className="text-lg mb-2">Darbības:</p>
 
                     <div className="flex flex-row gap-2 mt-2 text-xl">
-                        <label>
-                            <input type="checkbox" checked={formData.operations.includes("+")} onChange={() => toggleOperation("+")} className="peer hidden"/>
-                            <span className="peer-checked:bg-primary w-12 text-center inline-block peer-checked:text-white border border-primary px-4 py-2 rounded">+</span>
+                        {operations.map((op) => (
+                        <label key={op.value}>
+                            <input type="checkbox" checked={formData.operations.includes(op.value)} onChange={() => toggleOperation(op.value)} className="peer hidden"/>
+                            <span className="peer-checked:bg-primary w-12 text-center inline-block peer-checked:text-white border border-primary px-4 py-2 rounded">{op.label}</span>
                         </label>
-                        <label>
-                            <input type="checkbox" checked={formData.operations.includes("-")} onChange={() => toggleOperation("-")} className="peer hidden"/>
-                            <span className="peer-checked:bg-primary w-12 text-center inline-block peer-checked:text-white border border-primary px-4 py-2 rounded">-</span>
-                        </label>
-                        <label>
-                            <input type="checkbox" checked={formData.operations.includes("*")} onChange={() => toggleOperation("*")} className="peer hidden"/>
-                            <span className="peer-checked:bg-primary w-12 text-center inline-block peer-checked:text-white border border-primary px-4 py-2 rounded">×</span>
-                        </label>
-                        <label>
-                            <input type="checkbox" checked={formData.operations.includes("/")} onChange={() => toggleOperation("/")} className="peer hidden"/>
-                            <span className="peer-checked:bg-primary w-12 text-center inline-block peer-checked:text-white border border-primary px-4 py-2 rounded">÷</span>
-                        </label>
+                        ))}
                     </div>
                 </div>
 
                 <div className="flex justify-center">
-                    <button type="submit" className="text-white text-lg font-semibold bg-primary p-3 rounded w-2/3 md:w-1/3 mt-4">Sākt treniņu</button>
+                    <Button type="submit" variant="primary">Sākt treniņu</Button>
                 </div>
 
                 {error && <p>{error}</p>}

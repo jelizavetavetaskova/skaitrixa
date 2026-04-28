@@ -4,6 +4,7 @@ import type {Answer, Result, Task} from "../shared/types/database.ts";
 import {supabase} from "../lib/supabase.ts";
 import PageCard from "../shared/components/PageCard.tsx";
 import StatCard from "../features/results/components/StatCard.tsx";
+import Button from "../shared/components/Button.tsx";
 
 const ResultsPage = () => {
 
@@ -90,17 +91,16 @@ const ResultsPage = () => {
 
             {result &&
                 <div className="mt-5 text-lg">
-                    <div className="mb-5 flex flex-row justify-stretch gap-1">
+                    <div className="mb-5 flex flex-col md:flex-row md:justify-stretch md:gap-4 items-center">
                         <StatCard number={result.score} label="punkti"/>
-
                         <StatCard number={result.accuracy} label="precizitāte" unit="%"/>
-
-                        <StatCard number={Number(result.average_time.toFixed(2))} unit="s." label="Vidējais laiks"/>
-
+                        <StatCard number={Number(result.average_time.toFixed(2))} unit="s." label="vidējais laiks"/>
                     </div>
 
                     <div className="flex flex-col justify-center items-center mt-5">
-                        <button onClick={() => setShowTasks((prev) => !prev)} className="border border-primary rounded p-3">Paskatīties manas kļūdas</button>
+                        <Button onClick={() => setShowTasks((prev) => !prev)} variant="outline">
+                            Paskatīties manas kļūdas
+                        </Button>
 
                         {showTasks &&
                             <div className="mt-5">

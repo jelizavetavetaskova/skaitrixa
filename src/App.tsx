@@ -7,7 +7,7 @@ const App = () => {
   if (loading) return <p>Loading...</p>
 
   return (
-      <RouterComponent user={user} loading={loading}/>
+      <RouterComponent user={user}/>
   )
 }
 

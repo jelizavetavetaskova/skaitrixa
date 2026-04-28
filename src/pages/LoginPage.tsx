@@ -3,6 +3,8 @@ import {useAuth} from "../features/auth/hooks/useAuth.ts";
 import type {AuthError} from "@supabase/supabase-js";
 import {Link, useNavigate} from "react-router-dom";
 import PageCard from "../shared/components/PageCard.tsx";
+import Button from "../shared/components/Button.tsx";
+import LabeledInput from "../shared/components/LabeledInput.tsx";
 
 const LoginPage = () => {
     const [email, setEmail] = useState("");
@@ -28,28 +30,12 @@ const LoginPage = () => {
                 const error = await signIn(email, password);
                 if (error) setError(error);
             }}>
-                <div className="flex flex-col mx-auto justify-center items-center mb-4">
-                    <label htmlFor="username" className="text-lg mb-2">Lietotāja vārds:</label>
-                    <input
-                        type="email"
-                        id="username"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="p-3 w-2/3 rounded border border-gray-300 outline-primary"
-                    />
-                </div>
-                <div className="flex flex-col mx-auto justify-center items-center mb-4">
-                    <label htmlFor="password" className="text-lg mb-2">Parole:</label>
-                    <input
-                        type="password"
-                        id="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        className="p-3 w-2/3 rounded border border-gray-300 outline-primary"
-                    />
-                </div>
+
+                <LabeledInput type="email" label="Lietotāja vārds:" value={email} name="email" onChange={(e) => setEmail(e.target.value)} required={true} placeholder="anna_zelta@example.com"/>
+                <LabeledInput type="password" label="Parole:" value={password} name="password" onChange={(e) => setPassword(e.target.value)} required={true}/>
+
                 <div className="flex justify-center">
-                    <button type="submit" className="text-white text-lg font-semibold bg-primary p-3 rounded w-2/3">Autorizēties</button>
+                    <Button type="submit" variant="primary">Ieiet</Button>
                 </div>
 
                 {error && <p>{error.message}</p>}
