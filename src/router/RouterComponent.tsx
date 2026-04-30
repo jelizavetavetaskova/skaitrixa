@@ -1,12 +1,12 @@
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute.tsx";
 import type {User} from "../shared/types/database.ts";
-import LoginPage from "../pages/LoginPage.tsx";
-import RegisterPage from "../pages/RegisterPage.tsx";
-import Dashboard from "../pages/Dashboard.tsx";
+import LoginPage from "../features/auth/pages/LoginPage.tsx";
+import RegisterPage from "../features/auth/pages/RegisterPage.tsx";
+import Dashboard from "../features/dashboard/pages/Dashboard.tsx";
 import CreateTrainingPage from "../features/training/CreateTrainingPage.tsx";
-import GamePage from "../pages/GamePage.tsx";
-import ResultsPage from "../pages/ResultsPage.tsx";
+import GamePage from "../features/game/pages/GamePage.tsx";
+import ResultsPage from "../features/results/pages/ResultsPage.tsx";
 import HomePage from "../pages/HomePage.tsx";
 import Layout from "../shared/layouts/Layout.tsx";
 

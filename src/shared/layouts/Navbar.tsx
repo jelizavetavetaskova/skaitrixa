@@ -12,7 +12,7 @@ const Navbar = ({user}: NavbarProps) => {
     const [school, setSchool] = useState<School|null>(null);
     const [stClass, setStClass] = useState<Class|null>(null);
 
-    const {signOut} = useAuth();
+    const {signOutHook} = useAuth();
 
     useEffect(() => {
         const getSchool = async () => {
@@ -67,7 +67,7 @@ const Navbar = ({user}: NavbarProps) => {
                             alt="Account"
                             className="w-10"
                         />
-                        <button onClick={signOut}>Iziet</button>
+                        <button onClick={signOutHook}>Iziet</button>
                     </div>
                 </div>
                 :

@@ -1,17 +1,17 @@
-import {useEffect, useState} from "react";
-import {useAuth} from "../features/auth/hooks/useAuth.ts";
-import type {AuthError} from "@supabase/supabase-js";
+import {useEffect, useState, type SubmitEvent} from "react";
+import {useAuth} from "../hooks/useAuth.ts";
 import {Link, useNavigate} from "react-router-dom";
-import PageCard from "../shared/components/PageCard.tsx";
-import Button from "../shared/components/Button.tsx";
-import LabeledInput from "../shared/components/LabeledInput.tsx";
+import PageCard from "../../../shared/components/PageCard.tsx";
+import Button from "../../../shared/components/Button.tsx";
+import LabeledInput from "../../../shared/components/LabeledInput.tsx";
+import {signIn} from "../../../lib/services/authService.ts";
 
 const LoginPage = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState<AuthError|null>(null);
+    const [error, setError] = useState("");
 
-    const {signIn, user} = useAuth();
+    const {user} = useAuth();
 
     const navigate = useNavigate();
 
@@ -22,14 +22,22 @@ const LoginPage = () => {
         else if (user.role === "admin") navigate("/admin");
     }, [navigate, user]);
 
+    const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        try {
+            await signIn(email, password);
+        } catch (e) {
+            if (e instanceof Error) {
+                setError(e.message)
+            }
+        }
+    }
+
     return (
         <PageCard title="Autentifikācija" width="max-w-md">
 
-            <form onSubmit={async (e) => {
-                e.preventDefault();
-                const error = await signIn(email, password);
-                if (error) setError(error);
-            }}>
+            <form onSubmit={handleSubmit}>
 
                 <LabeledInput type="email" label="Lietotāja vārds:" value={email} name="email" onChange={(e) => setEmail(e.target.value)} required={true} placeholder="anna_zelta@example.com"/>
                 <LabeledInput type="password" label="Parole:" value={password} name="password" onChange={(e) => setPassword(e.target.value)} required={true}/>
@@ -38,7 +46,7 @@ const LoginPage = () => {
                     <Button type="submit" variant="primary">Ieiet</Button>
                 </div>
 
-                {error && <p>{error.message}</p>}
+                {error && <p>{error}</p>}
             </form>
 
             <div className="flex flex-col items-center mt-5">

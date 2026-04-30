@@ -1,11 +1,11 @@
 import {useNavigate, useParams} from "react-router-dom";
-import {supabase} from "../lib/supabase.ts";
+import {supabase} from "../../../lib/supabase.ts";
 import {useEffect, useRef, useState} from "react";
-import type {Training, User} from "../shared/types/database.ts";
-import type {GeneratedTask} from "../shared/types/app.ts";
-import {generateTask} from "../features/game/utils/generateTask.ts";
-import Timer from "../features/game/components/Timer.tsx";
-import Keyboard from "../features/game/components/Keyboard.tsx";
+import type {Training, User} from "../../../shared/types/database.ts";
+import type {GeneratedTask} from "../../../shared/types/app.ts";
+import {generateTask} from "../utils/generateTask.ts";
+import Timer from "../components/Timer.tsx";
+import Keyboard from "../components/Keyboard.tsx";
 import {Check, Pause, Play, X} from "lucide-react";
 
 type SavedAnswer = {

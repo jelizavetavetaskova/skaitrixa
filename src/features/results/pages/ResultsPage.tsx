@@ -1,10 +1,10 @@
 import {Link, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
-import type {Answer, Result, Task} from "../shared/types/database.ts";
-import {supabase} from "../lib/supabase.ts";
-import PageCard from "../shared/components/PageCard.tsx";
-import StatCard from "../features/results/components/StatCard.tsx";
-import Button from "../shared/components/Button.tsx";
+import type {Answer, Result, Task} from "../../../shared/types/database.ts";
+import {supabase} from "../../../lib/supabase.ts";
+import PageCard from "../../../shared/components/PageCard.tsx";
+import StatCard from "../components/StatCard.tsx";
+import Button from "../../../shared/components/Button.tsx";
 
 const ResultsPage = () => {
 

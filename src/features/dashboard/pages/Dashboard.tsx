@@ -1,10 +1,10 @@
 import {Link, useNavigate} from "react-router-dom";
-import type {Result, Training, User} from "../shared/types/database.ts";
-import {supabase} from "../lib/supabase.ts";
+import type {Result, Training, User} from "../../../shared/types/database.ts";
+import {supabase} from "../../../lib/supabase.ts";
 import {useEffect, useState} from "react";
-import PageCard from "../shared/components/PageCard.tsx";
-import InfoCard from "../features/dashboard/components/InfoCard.tsx";
-import LinkButton from "../shared/components/LinkButton.tsx";
+import PageCard from "../../../shared/components/PageCard.tsx";
+import InfoCard from "../components/InfoCard.tsx";
+import LinkButton from "../../../shared/components/LinkButton.tsx";
 
 interface DashboardProps {
     user: User | null;

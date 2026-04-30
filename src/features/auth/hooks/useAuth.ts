@@ -1,21 +1,24 @@
 import {useEffect, useState} from "react";
-import {supabase} from "../../../lib/supabase.ts";
 import type {User} from "../../../shared/types/database.ts";
+import {fetchUser, onAuthChange, signIn, signOut} from "../../../lib/services/authService.ts";
 
 export const useAuth = () => {
     const [loading, setLoading] = useState(true);
     const [user, setUser] = useState<User|null>(null);
 
     useEffect(() => {
-        const fetchUser = async (id: string) => {
-            const {data} = await supabase.from("users").select("*").eq("user_id", id).single();
-            setUser(data);
-            setLoading(false);
+        const loadUser = async (id: string) => {
+            try {
+                const data = await fetchUser(id);
+                setUser(data);
+            } finally {
+                setLoading(false);
+            }
         }
 
-        const {data: {subscription}} = supabase.auth.onAuthStateChange((_event, session) => {
+        const subscription = onAuthChange((session) => {
             if (session?.user) {
-                fetchUser(session.user.id);
+                loadUser(session.user.id);
             } else {
                 setUser(null);
                 setLoading(false);
@@ -25,15 +28,10 @@ export const useAuth = () => {
         return () => subscription.unsubscribe();
     }, []);
 
-    const signIn = async (email: string, password: string) => {
-        const {error} = await supabase.auth.signInWithPassword({email, password});
-        return error;
-    }
-
-    const signOut = async () => {
-        await supabase.auth.signOut();
+    const signOutHook = async () => {
+        await signOut();
         setUser(null);
     }
 
-    return {user, loading, signIn, signOut};
+    return {user, loading, signOutHook};
 }
