@@ -20,3 +20,13 @@ export const createTask = async (task: TaskData): Promise<Task> => {
 
     return data;
 }
+
+export const getTasksByTrainingId = async (id: number) => {
+    const {data, error} = await supabase.from("tasks")
+        .select("*")
+        .eq("training_id", id);
+
+    if (error) throw error;
+
+    return data;
+}

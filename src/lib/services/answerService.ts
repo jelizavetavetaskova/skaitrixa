@@ -19,3 +19,14 @@ export const saveAnswers = async (answers: AnswerData[], resultId: number) => {
     const {error} = await supabase.from("answers").insert(mapped);
     if (error) throw error;
 }
+
+export const getMistakenAnswers = async (ids: number[]) => {
+    const {data, error} = await supabase.from("answers")
+        .select("*")
+        .in("task_id", ids)
+        .eq("is_correct", false);
+
+    if (error) throw error;
+
+    return data;
+}

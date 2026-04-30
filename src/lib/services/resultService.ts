@@ -21,3 +21,14 @@ export const createResult = async (result: ResultData) => {
 
     return data;
 }
+
+export const getResult = async (id: number) => {
+    const {data, error} = await supabase.from("results")
+        .select("*")
+        .eq("result_id", id)
+        .single();
+
+    if (error) throw error;
+
+    return data;
+}
