@@ -1,5 +1,4 @@
 import {useNavigate, useParams} from "react-router-dom";
-import {supabase} from "../../../lib/supabase.ts";
 import {useEffect, useRef, useState} from "react";
 import type {Training, User} from "../../../shared/types/database.ts";
 import type {GeneratedTask} from "../../../shared/types/app.ts";
@@ -7,12 +6,16 @@ import {generateTask} from "../utils/generateTask.ts";
 import Timer from "../components/Timer.tsx";
 import Keyboard from "../components/Keyboard.tsx";
 import {Check, Pause, Play, X} from "lucide-react";
+import {createTask} from "../../../lib/services/taskService.ts";
+import {getTraining} from "../../../lib/services/trainingService.ts";
+import {createResult} from "../../../lib/services/resultService.ts";
+import {saveAnswers} from "../../../lib/services/answerService.ts";
 
 type SavedAnswer = {
     answer: number;
-    is_correct: boolean;
-    time_spent: number;
-    task_id: number;
+    isCorrect: boolean;
+    timeSpent: number;
+    taskId: number;
 }
 
 interface GameProps {
@@ -72,10 +75,10 @@ const GamePage = ({user}: GameProps) => {
 
         answersRef.current = [...answersRef.current, {
             answer: Number(answer),
-            is_correct: Number(answer) === currentTask?.correct,
+            isCorrect: Number(answer) === currentTask?.correct,
             // eslint-disable-next-line react-hooks/purity
-            time_spent: (Date.now() - taskStart.current) / 1000,
-            task_id: taskId
+            timeSpent: (Date.now() - taskStart.current) / 1000,
+            taskId: taskId,
         }]
     }
 
@@ -84,26 +87,32 @@ const GamePage = ({user}: GameProps) => {
     }
 
     const saveTask = async (): Promise<number> => {
-        const {data, error} = await supabase.from("tasks").insert({
-            first_num: currentTask?.firstNum,
-            operation: currentTask?.operation,
-            second_num: currentTask?.secondNum,
-            training_id: training?.training_id
-        }).select().single();
+        try {
+            if (currentTask) {
+                const data = await createTask({
+                    firstNum: currentTask.firstNum,
+                    operation: currentTask.operation,
+                    secondNum: currentTask.secondNum,
+                    trainingId: Number(training_id)
+                })
 
-        if (error) {
-            setError(error.message);
-            return -1;
+                return data.task_id;
+            }
+        } catch (e) {
+            if (e instanceof Error) {
+                setError(e.message);
+                return -1;
+            }
         }
 
-        return data.task_id;
+        return 0;
     }
 
     const endGame = async () => {
         const total: number = correctRef.current + mistakesRef.current;
         const accuracy = (correctRef.current / total) * 100;
 
-        const times: number[] = answersRef.current.map((a) => a.time_spent);
+        const times: number[] = answersRef.current.map((a) => a.timeSpent);
         let timeSum = 0;
         for (let i = 0; i < times.length; i++) {
             timeSum += times[i];
@@ -111,66 +120,56 @@ const GamePage = ({user}: GameProps) => {
 
         const average = timeSum / times.length;
 
-        console.log("training: ", training)
-        const {data, error} = await supabase.from("results").insert({
-            score: correctRef.current,
-            accuracy: Math.floor(accuracy),
-            average_time: average,
-            training_id: training?.training_id,
-            user_id: user?.user_id
-        }).select().single();
-
-        if (error) {
-            setError(error.message);
-            return;
-        }
-
-        const result_id = data.result_id;
-
-        for (let i = 0; i < answersRef.current.length; i++) {
-            const answer = answersRef.current[i];
-
-            await supabase.from("answers").insert({
-                answer: answer.answer,
-                is_correct: answer.is_correct,
-                time_spent: answer.time_spent,
-                task_id: answer.task_id,
-                result_id: result_id
+        try {
+            const data = await createResult({
+                score: correctRef.current,
+                accuracy: Math.floor(accuracy),
+                averageTime: average,
+                trainingId: training?.training_id ?? null,
+                userId: user?.user_id ?? null
             })
-        }
 
-        setIsBlocked(true);
-        navigate(`/student/results/${result_id}`);
+            const result_id = data.result_id;
+
+            await saveAnswers(answersRef.current, result_id);
+
+            setIsBlocked(true);
+            navigate(`/student/results/${result_id}`);
+        } catch (e) {
+            if (e instanceof Error) {
+                setError(e.message);
+            }
+        }
     }
 
     useEffect(() => {
-        const getTraining = async () => {
+        const loadTraining = async () => {
             if (!training_id) {
                 setError("Invalid training id");
                 return;
             }
 
-            const {data, error} = await supabase.from("trainings").select("*").eq("training_id", training_id).limit(1).single();
+            try {
+                const data = await getTraining(Number(training_id));
 
-            if (error) {
-                setError(error.message);
-                return;
+                setTraining(data);
+
+                if (!data) {
+                    setError("Training does not exist");
+                    return;
+                }
+
+                const task = generateTask(data.level, data.operations);
+                setCurrentTask(task);
+                taskStart.current = Date.now();
+            } catch (e) {
+                if (e instanceof Error) {
+                    setError(e.message);
+                }
             }
-
-            setTraining(data);
-
-            if (!data) {
-                setError("Training does not exist");
-                return;
-            }
-
-
-            const task = generateTask(data.level, data.operations);
-            setCurrentTask(task);
-            taskStart.current = Date.now();
         }
 
-        getTraining();
+        loadTraining();
     }, [training_id]);
 
     return (

@@ -22,3 +22,15 @@ export const createTraining = async (trainingData: TrainingData): Promise<Traini
 
     return data;
 }
+
+export const getTraining = async (id: number) => {
+    const {data, error} = await supabase.from("trainings")
+        .select("*")
+        .eq("training_id", id)
+        .limit(1)
+        .single();
+
+    if (error) throw error;
+
+    return data;
+}
