@@ -1,18 +1,16 @@
-import {Link, useNavigate} from "react-router-dom";
 import type {Result, Training, User} from "../../../shared/types/database.ts";
-import {supabase} from "../../../lib/supabase.ts";
 import {useEffect, useState} from "react";
 import PageCard from "../../../shared/components/PageCard.tsx";
 import InfoCard from "../components/InfoCard.tsx";
 import LinkButton from "../../../shared/components/LinkButton.tsx";
+import {getTrainingsByStudentId} from "../../../lib/services/trainingService.ts";
+import {getBestResult, getLastResult} from "../../../lib/services/resultService.ts";
 
 interface DashboardProps {
     user: User | null;
 }
 
 const Dashboard = ({user}: DashboardProps) => {
-    const navigate = useNavigate();
-
     const [tests, setTests] = useState<Training[]|null>([]);
 
     const [bestResult, setBestResult] = useState<Result|null>(null);
@@ -24,17 +22,14 @@ const Dashboard = ({user}: DashboardProps) => {
         if (!user?.user_id) return;
 
         const getTests = async () => {
-            const res = await supabase.from("trainings")
-                .select("*")
-                .eq("student_id", user?.user_id)
-                .eq("type", "test");
-
-            if (res.error) {
-                setError(res.error.message);
-                return;
+            try {
+                const data = await getTrainingsByStudentId(user.user_id);
+                setTests(data);
+            } catch (e) {
+                if (e instanceof Error) {
+                    setError(e.message);
+                }
             }
-
-            setTests(res.data);
         }
 
         getTests();
@@ -44,35 +39,25 @@ const Dashboard = ({user}: DashboardProps) => {
         if (!user?.user_id) return;
 
         const getBest = async () => {
-            const res = await supabase.from("results")
-                .select("*")
-                .eq("user_id", user?.user_id)
-                .order("score", {ascending: false})
-                .limit(1)
-                .maybeSingle();
-
-            if (res.error) {
-                setError(res.error.message);
-                return;
+            try {
+                const data = await getBestResult(user.user_id);
+                setBestResult(data);
+            } catch (e) {
+                if (e instanceof Error) {
+                    setError(e.message);
+                }
             }
-
-            setBestResult(res.data);
         }
 
         const getLast = async () => {
-            const res = await supabase.from("results")
-                .select("*")
-                .eq("user_id", user?.user_id)
-                .order("created_at", {ascending: false})
-                .limit(1)
-                .maybeSingle();
-
-            if (res.error) {
-                setError(res.error.message);
-                return;
+            try {
+                const data = await getLastResult(user.user_id);
+                setLastResult(data);
+            } catch (e) {
+                if (e instanceof Error) {
+                    setError(e.message);
+                }
             }
-
-            setLastResult(res.data);
         }
 
         getBest();
@@ -109,6 +94,8 @@ const Dashboard = ({user}: DashboardProps) => {
                     </ol>
                 </InfoCard>
             </div>
+
+            {error && <p>{error}</p>}
         </PageCard>
     )
 }

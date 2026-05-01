@@ -34,3 +34,14 @@ export const getTraining = async (id: number) => {
 
     return data;
 }
+
+export const getTrainingsByStudentId = async (id: string) => {
+    const {data, error} = await supabase.from("trainings")
+        .select("*")
+        .eq("student_id", id)
+        .eq("type", "test");
+
+    if (error) throw error;
+
+    return data;
+}
