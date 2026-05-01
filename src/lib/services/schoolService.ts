@@ -48,3 +48,12 @@ export const deleteSchool = async (id: number) => {
 
     if (error) throw error;
 }
+
+export const countSchools = async () => {
+    const {count, error} = await supabase.from("schools")
+        .select("*", {count: "exact", head: true})
+
+    if (error) throw error;
+
+    return count;
+}

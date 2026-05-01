@@ -9,6 +9,7 @@ import GamePage from "../features/game/pages/GamePage.tsx";
 import ResultsPage from "../features/results/pages/ResultsPage.tsx";
 import HomePage from "../pages/HomePage.tsx";
 import Layout from "../shared/layouts/Layout.tsx";
+import AdminDashboard from "../features/admin/pages/AdminDashboard.tsx";
 
 interface RouterProps {
     user: User | null;
@@ -73,7 +74,7 @@ const RouterComponent = ({user}: RouterProps) => {
                     {/* ADMIN */}
                     <Route path="/admin" element={
                         <ProtectedRoute user={user} roles={["admin"]}>
-                            <h1>Admin lapa</h1>
+                            <AdminDashboard />
                         </ProtectedRoute>
                     } />
 
