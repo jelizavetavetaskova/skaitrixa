@@ -10,6 +10,7 @@ import ResultsPage from "../features/results/pages/ResultsPage.tsx";
 import HomePage from "../pages/HomePage.tsx";
 import Layout from "../shared/layouts/Layout.tsx";
 import AdminDashboard from "../features/admin/pages/AdminDashboard.tsx";
+import SchoolsPage from "../features/admin/pages/SchoolsPage.tsx";
 
 interface RouterProps {
     user: User | null;
@@ -77,6 +78,12 @@ const RouterComponent = ({user}: RouterProps) => {
                             <AdminDashboard />
                         </ProtectedRoute>
                     } />
+                    <Route path="/admin/schools" element={
+                        <ProtectedRoute user={user} roles={["admin"]}>
+                            <SchoolsPage />
+                        </ProtectedRoute>
+                    }
+                    />
 
                     {/* ielogotie lietotāji */}
                     <Route path="/profile" element={
