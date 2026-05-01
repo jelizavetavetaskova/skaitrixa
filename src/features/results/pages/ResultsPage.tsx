@@ -1,10 +1,12 @@
 import {Link, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
-import type {Answer, Result, Task} from "../shared/types/database.ts";
-import {supabase} from "../lib/supabase.ts";
-import PageCard from "../shared/components/PageCard.tsx";
-import StatCard from "../features/results/components/StatCard.tsx";
-import Button from "../shared/components/Button.tsx";
+import type {Answer, Result, Task} from "../../../shared/types/database.ts";
+import PageCard from "../../../shared/components/PageCard.tsx";
+import StatCard from "../components/StatCard.tsx";
+import Button from "../../../shared/components/Button.tsx";
+import {getResult} from "../../../lib/services/resultService.ts";
+import {getTasksByTrainingId} from "../../../lib/services/taskService.ts";
+import {getMistakenAnswers} from "../../../lib/services/answerService.ts";
 
 const ResultsPage = () => {
 
@@ -27,63 +29,57 @@ const ResultsPage = () => {
     }
 
     useEffect(() => {
-        const getResult = async () => {
-            const {data, error} = await supabase.from("results")
-                .select("*")
-                .eq("result_id", Number(result_id))
-                .single();
-
-            if (error) {
-                setError(error.message);
-                return;
+        const loadResult = async () => {
+            try {
+                const data = await getResult(Number(result_id));
+                setResult(data);
+            } catch (e) {
+                if (e instanceof Error) {
+                    setError(e.message);
+                }
             }
-
-            setResult(data);
         }
 
-        getResult();
+        loadResult();
     }, [result_id]);
 
     useEffect(() => {
-        const getMistakenTasks = async () => {
+        const loadTasks = async () => {
             if (!result?.training_id) return;
 
-            const {data, error} = await supabase.from("tasks")
-                .select("*")
-                .eq("training_id", result?.training_id)
-
-            if (error) {
-                setError(error.message);
-                return;
+            try {
+                const data = await getTasksByTrainingId(result.training_id);
+                setTasks(data);
+            } catch (e) {
+                if (e instanceof Error) {
+                    setError(e.message)
+                }
             }
-
-            setTasks(data);
         }
 
-        getMistakenTasks();
+        loadTasks();
     }, [result?.training_id]);
 
     useEffect(() => {
-        const getAnswers = async () => {
+        const loadAnswers = async () => {
             if (tasks.length === 0) return;
 
-            const {data, error} = await supabase.from("answers")
-                .select("*")
-                .in("task_id", tasks.map((t) => t.task_id))
-                .eq("is_correct", false);
+            const ids = tasks.map((t) => t.task_id);
 
-            if (error) {
-                setError(error.message);
-                return;
+            try {
+                const data = await getMistakenAnswers(ids);
+                const map: Record<number, Answer> = {};
+                data.forEach((a: Answer) => map[a.task_id] = a);
+
+                setAnswers(map);
+            } catch (e) {
+                if (e instanceof Error) {
+                    setError(e.message)
+                }
             }
-
-            const map: Record<number, Answer> = {};
-            data.forEach((a: Answer) => map[a.task_id] = a);
-
-            setAnswers(map);
         }
 
-        getAnswers();
+        loadAnswers();
     }, [tasks]);
 
     return (

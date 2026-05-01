@@ -1,12 +1,12 @@
 import {type ChangeEvent, type SubmitEvent, useState} from "react";
-import {supabase} from "../../lib/supabase.ts";
 import type {User} from "../../shared/types/database.ts";
 import {useNavigate} from "react-router-dom";
 import Button from "../../shared/components/Button.tsx";
 import LabeledInput from "../../shared/components/LabeledInput.tsx";
+import {createTraining} from "../../lib/services/trainingService.ts";
 
 interface CreateTrainingProps {
-    type: string;
+    type: "training" | "test";
     user: User | null;
 }
 
@@ -30,7 +30,7 @@ const operations = [
 ]
 
 const CreateTrainingPage = ({type, user}: CreateTrainingProps) => {
-    const [formData, setFormData] = useState<{title: string, level: string, operations: string[], time: number}>({
+    const [formData, setFormData] = useState<{title: string, level: "easy" | "medium" | "hard", operations: string[], time: number}>({
         title: "",
         level: "easy",
         operations: [],
@@ -50,45 +50,40 @@ const CreateTrainingPage = ({type, user}: CreateTrainingProps) => {
         }))
     }
 
-    const startGame = async () => {
-        const {data, error} = await supabase.from("trainings").select("*").eq("student_id", user?.user_id).order("created_at", {ascending: false}).limit(1).maybeSingle();
 
-        if (error) {
-            setError(error.message);
-            return;
-        }
-
-        navigate(`/game/${data.training_id}`)
-    }
 
     const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
         setError("");
 
-        const {error} = await supabase.from("trainings")
-            .insert({
-                title: formData.title,
-                type: type,
-                level: formData.level,
-                time: formData.time,
-                operations: formData.operations,
-                status: "pending",
-                ...(type === "training" ? {student_id: user?.user_id} : {teacher_id: user?.user_id})
-            });
-
-        if (error) {
-            setError(error.message);
+        if (formData.operations.length === 0) {
+            setError("Izvēlieties vismaz vienu operāciju!");
             return;
         }
 
-        setFormData({
-            title: "",
-            level: "easy",
-            operations: [],
-            time: 30,
-        });
+        try {
+            const data = await createTraining({
+                ...formData,
+                type: type,
+                teacher_id: user?.role === "teacher" ? user.user_id : null,
+                student_id: user?.role === "student" ? user.user_id : null,
+            })
 
-        if (type === "training") await startGame();
+            if (data.type === "test") {
+                setFormData({
+                    title: "",
+                    level: "easy",
+                    operations: [],
+                    time: 30,
+                });
+            }
+
+            if (data.type === "training") navigate(`/game/${data.training_id}`)
+        } catch (e) {
+            if (e instanceof Error) {
+                setError(e.message);
+            }
+        }
     }
 
     const toggleOperation = (op: string) => {

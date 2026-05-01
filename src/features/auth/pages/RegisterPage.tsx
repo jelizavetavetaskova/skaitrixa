@@ -1,9 +1,9 @@
 import {type ChangeEvent, useState, type SubmitEvent} from "react";
-import {supabase} from "../lib/supabase.ts";
 import {Link, useNavigate} from "react-router-dom";
-import PageCard from "../shared/components/PageCard.tsx";
-import Button from "../shared/components/Button.tsx";
-import LabeledInput from "../shared/components/LabeledInput.tsx";
+import PageCard from "../../../shared/components/PageCard.tsx";
+import Button from "../../../shared/components/Button.tsx";
+import LabeledInput from "../../../shared/components/LabeledInput.tsx";
+import {createUserProfile, signUp} from "../../../lib/services/authService.ts";
 
 const RegisterPage = () => {
     const [formData, setFormData] = useState({
@@ -27,22 +27,14 @@ const RegisterPage = () => {
     }
 
     const addUser = async (userId: string) => {
-        const {error} = await supabase
-            .from("users")
-            .insert({
-                user_id: userId,
-                name: formData.name,
-                surname: formData.surname,
-                email: formData.email,
-                role: "student"
-            });
-
-        if (error) {
-            setError(error.message);
-            return;
+        try {
+            await createUserProfile(userId, formData);
+            navigate("/");
+        } catch (e) {
+            if (e instanceof Error) {
+                setError(e.message);
+            }
         }
-
-        navigate("/");
     }
 
     const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
@@ -53,13 +45,14 @@ const RegisterPage = () => {
             return;
         }
 
-        const {data, error} = await supabase.auth.signUp({email: formData.email, password: formData.password});
-        if (error) {
-            setError(error.message);
-            return;
+        try {
+            const data = await signUp(formData.email, formData.password)
+            if (data.user) await addUser(data.user.id);
+        } catch (e) {
+            if (e instanceof Error) {
+                setError(e.message);
+            }
         }
-
-        if (data.user) await addUser(data.user.id);
     }
 
     return (
