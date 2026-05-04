@@ -10,6 +10,7 @@ import {createTask} from "../../../lib/services/taskService.ts";
 import {getTraining} from "../../../lib/services/trainingService.ts";
 import {createResult} from "../../../lib/services/resultService.ts";
 import {saveAnswers} from "../../../lib/services/answerService.ts";
+import {getErrorMessage} from "../../../shared/utils/getErrorMessage.ts";
 
 type SavedAnswer = {
     answer: number;
@@ -99,10 +100,7 @@ const GamePage = ({user}: GameProps) => {
                 return data.task_id;
             }
         } catch (e) {
-            if (e instanceof Error) {
-                setError(e.message);
-                return -1;
-            }
+            setError(getErrorMessage(e));
         }
 
         return 0;
@@ -136,9 +134,7 @@ const GamePage = ({user}: GameProps) => {
             setIsBlocked(true);
             navigate(`/student/results/${result_id}`);
         } catch (e) {
-            if (e instanceof Error) {
-                setError(e.message);
-            }
+            setError(getErrorMessage(e));
         }
     }
 
@@ -163,9 +159,7 @@ const GamePage = ({user}: GameProps) => {
                 setCurrentTask(task);
                 taskStart.current = Date.now();
             } catch (e) {
-                if (e instanceof Error) {
-                    setError(e.message);
-                }
+                setError(getErrorMessage(e));
             }
         }
 

@@ -4,6 +4,7 @@ import PageCard from "../../../shared/components/PageCard.tsx";
 import Button from "../../../shared/components/Button.tsx";
 import LabeledInput from "../../../shared/components/LabeledInput.tsx";
 import {createUserProfile, signUp} from "../../../lib/services/authService.ts";
+import {getErrorMessage} from "../../../shared/utils/getErrorMessage.ts";
 
 const RegisterPage = () => {
     const [formData, setFormData] = useState({
@@ -31,9 +32,7 @@ const RegisterPage = () => {
             await createUserProfile(userId, formData);
             navigate("/");
         } catch (e) {
-            if (e instanceof Error) {
-                setError(e.message);
-            }
+            setError(getErrorMessage(e));
         }
     }
 
@@ -49,9 +48,7 @@ const RegisterPage = () => {
             const data = await signUp(formData.email, formData.password)
             if (data.user) await addUser(data.user.id);
         } catch (e) {
-            if (e instanceof Error) {
-                setError(e.message);
-            }
+            setError(getErrorMessage(e));
         }
     }
 

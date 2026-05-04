@@ -7,6 +7,7 @@ import Button from "../../../shared/components/Button.tsx";
 import {getResult} from "../../../lib/services/resultService.ts";
 import {getTasksByTrainingId} from "../../../lib/services/taskService.ts";
 import {getMistakenAnswers} from "../../../lib/services/answerService.ts";
+import {getErrorMessage} from "../../../shared/utils/getErrorMessage.ts";
 
 const ResultsPage = () => {
 
@@ -34,9 +35,7 @@ const ResultsPage = () => {
                 const data = await getResult(Number(result_id));
                 setResult(data);
             } catch (e) {
-                if (e instanceof Error) {
-                    setError(e.message);
-                }
+                setError(getErrorMessage(e));
             }
         }
 
@@ -51,9 +50,7 @@ const ResultsPage = () => {
                 const data = await getTasksByTrainingId(result.training_id);
                 setTasks(data);
             } catch (e) {
-                if (e instanceof Error) {
-                    setError(e.message)
-                }
+                setError(getErrorMessage(e));
             }
         }
 
@@ -73,9 +70,7 @@ const ResultsPage = () => {
 
                 setAnswers(map);
             } catch (e) {
-                if (e instanceof Error) {
-                    setError(e.message)
-                }
+                setError(getErrorMessage(e));
             }
         }
 

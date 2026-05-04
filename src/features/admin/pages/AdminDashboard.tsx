@@ -4,6 +4,7 @@ import {useEffect, useState} from "react";
 import {countUsers} from "../../../lib/services/userService.ts";
 import {countClasses} from "../../../lib/services/classService.ts";
 import StatLink from "../components/StatLink.tsx";
+import {getErrorMessage} from "../../../shared/utils/getErrorMessage.ts";
 
 const AdminDashboard = () => {
     const [schoolsCount, setSchoolsCount] = useState(0);
@@ -22,9 +23,7 @@ const AdminDashboard = () => {
                 }
                 setSchoolsCount(count);
             } catch (e) {
-                if (e instanceof Error) {
-                    setError(e.message);
-                }
+                setError(getErrorMessage(e));
             }
         }
 
@@ -37,9 +36,7 @@ const AdminDashboard = () => {
                 }
                 setClassesCount(count);
             } catch (e) {
-                if (e instanceof Error) {
-                    setError(e.message);
-                }
+                setError(getErrorMessage(e));
             }
         }
 
@@ -52,9 +49,7 @@ const AdminDashboard = () => {
                 }
                 setUsersCount(count);
             } catch (e) {
-                if (e instanceof Error) {
-                    setError(e.message);
-                }
+                setError(getErrorMessage(e));
             }
         }
 

@@ -4,6 +4,7 @@ import {useNavigate} from "react-router-dom";
 import Button from "../../shared/components/Button.tsx";
 import LabeledInput from "../../shared/components/LabeledInput.tsx";
 import {createTraining} from "../../lib/services/trainingService.ts";
+import {getErrorMessage} from "../../shared/utils/getErrorMessage.ts";
 
 interface CreateTrainingProps {
     type: "training" | "test";
@@ -80,9 +81,7 @@ const CreateTrainingPage = ({type, user}: CreateTrainingProps) => {
 
             if (data.type === "training") navigate(`/game/${data.training_id}`)
         } catch (e) {
-            if (e instanceof Error) {
-                setError(e.message);
-            }
+            setError(getErrorMessage(e));
         }
     }
 

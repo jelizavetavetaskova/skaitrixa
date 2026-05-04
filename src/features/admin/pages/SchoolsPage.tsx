@@ -3,7 +3,7 @@ import type {School} from "../../../shared/types/database.ts";
 import {createSchool, deleteSchool, getAllSchools, updateSchool} from "../../../lib/services/schoolService.ts";
 import PageCard from "../../../shared/components/PageCard.tsx";
 import {Check, Pencil, Plus, Trash, X} from "lucide-react";
-import LabeledInput from "../../../shared/components/LabeledInput.tsx";
+import {getErrorMessage} from "../../../shared/utils/getErrorMessage.ts";
 
 const SchoolsPage = () => {
     const [schools, setSchools] =  useState<School[]>([]);
@@ -20,9 +20,7 @@ const SchoolsPage = () => {
                 const data = await getAllSchools();
                 if (data !== null) setSchools(data);
             } catch (e) {
-                if (e instanceof Error) {
-                    setError(e.message);
-                }
+                setError(getErrorMessage(e))
             }
         }
 
@@ -39,9 +37,7 @@ const SchoolsPage = () => {
                 setSchools(data ?? []);
             }
         } catch (e) {
-            if (e instanceof Error) {
-                setError(e.message);
-            }
+            setError(getErrorMessage(e))
         }
     }
 
@@ -52,9 +48,7 @@ const SchoolsPage = () => {
             const data = await getAllSchools();
             setSchools(data ?? []);
         } catch (e) {
-            if (e instanceof Error) {
-                setError(e.message);
-            }
+            setError(getErrorMessage(e))
         }
     }
 
@@ -65,9 +59,7 @@ const SchoolsPage = () => {
             const data = await getAllSchools();
             setSchools(data ?? []);
         } catch (e) {
-            if (e instanceof Error) {
-                setError(e.message);
-            }
+            setError(getErrorMessage(e))
         }
     }
 
