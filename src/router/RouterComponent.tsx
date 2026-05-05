@@ -11,6 +11,7 @@ import HomePage from "../pages/HomePage.tsx";
 import Layout from "../shared/layouts/Layout.tsx";
 import AdminDashboard from "../features/admin/pages/AdminDashboard.tsx";
 import SchoolsPage from "../features/admin/pages/SchoolsPage.tsx";
+import ClassesPage from "../features/admin/pages/ClassesPage.tsx";
 
 interface RouterProps {
     user: User | null;
@@ -81,6 +82,12 @@ const RouterComponent = ({user}: RouterProps) => {
                     <Route path="/admin/schools" element={
                         <ProtectedRoute user={user} roles={["admin"]}>
                             <SchoolsPage />
+                        </ProtectedRoute>
+                    }
+                    />
+                    <Route path="/admin/classes" element={
+                        <ProtectedRoute user={user} roles={["admin"]}>
+                            <ClassesPage />
                         </ProtectedRoute>
                     }
                     />
