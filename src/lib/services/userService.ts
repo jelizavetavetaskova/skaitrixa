@@ -17,7 +17,14 @@ export const countUsers = async () => {
 }
 
 export const createTeacher = async (input: CreateTeacherInput) => {
-    const {data, error} = await supabase.functions.invoke("create-teacher", {body: input});
+    const {data: {session}} = await supabase.auth.getSession();
+
+    const {data, error} = await supabase.functions.invoke("create-teacher", {
+        body: input,
+        headers: {
+            Authorization: `Bearer ${session?.access_token}`
+        }
+    });
 
     if (error) throw error;
 

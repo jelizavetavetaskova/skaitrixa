@@ -6,15 +6,21 @@
 import "@supabase/functions-js/edge-runtime.d.ts"
 import {createClient} from "https://esm.sh/@supabase/supabase-js@2";
 
+const corsHeaders = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type'
+}
+
 const supabaseUrl = Deno.env.get('SUPABASE_URL')!
 const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
 const anonKey = Deno.env.get('SUPABASE_ANON_KEY')!
 
 Deno.serve(async (req) => {
+    if (req.method === 'OPTIONS') return new Response('ok', {headers: corsHeaders})
   const {email, name, surname, school_id} = await req.json();
   const authHeader = req.headers.get('Authorization');
   if (!authHeader) {
-    return new Response(JSON.stringify({error: "Unauthorized"}), {status: 401});
+    return new Response(JSON.stringify({error: "Unauthorized"}), {status: 401, headers: corsHeaders});
   }
 
   const userClient = createClient(supabaseUrl, anonKey, {
@@ -23,7 +29,7 @@ Deno.serve(async (req) => {
 
   const {data: {user}} = await userClient.auth.getUser();
   if (!user) {
-    return new Response(JSON.stringify({error: "Invalid token"}), {status: 401});
+    return new Response(JSON.stringify({error: "Invalid token"}), {status: 401, headers: corsHeaders});
   }
 
   const {data: profile} = await userClient
@@ -33,7 +39,7 @@ Deno.serve(async (req) => {
       .single();
 
   if (profile?.role !== "admin") {
-    return new Response(JSON.stringify({error: "Forbidden"}), {status: 403});
+    return new Response(JSON.stringify({error: "Forbidden"}), {status: 403, headers: corsHeaders});
   }
 
   const adminClient = createClient(supabaseUrl, serviceRoleKey);
@@ -41,7 +47,7 @@ Deno.serve(async (req) => {
   const {data: invited, error: inviteError} = await adminClient.auth.admin.inviteUserByEmail(email);
 
   if (inviteError) {
-    return new Response(JSON.stringify({error: inviteError.message}), {status: 400});
+    return new Response(JSON.stringify({error: inviteError.message}), {status: 400, headers: corsHeaders});
   }
 
   const {error: insertError} = await adminClient
@@ -56,10 +62,10 @@ Deno.serve(async (req) => {
       })
 
   if (insertError) {
-    return new Response(JSON.stringify({error: insertError.message}), {status: 400});
+    return new Response(JSON.stringify({error: insertError.message}), {status: 400, headers: corsHeaders});
   }
 
-  return new Response(JSON.stringify({success: true, user_id: invited.user.id}), {headers: {'Content-Type': 'application/json'}})
+  return new Response(JSON.stringify({success: true, user_id: invited.user.id}), {headers: {...corsHeaders, 'Content-Type': 'application/json'}})
 })
 
 /* To invoke locally:

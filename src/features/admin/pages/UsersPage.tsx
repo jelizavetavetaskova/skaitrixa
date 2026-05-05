@@ -34,8 +34,6 @@ const UsersPage = () => {
         getSchools();
     }, []);
 
-
-
     const addTeacher = async (e: SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
 
