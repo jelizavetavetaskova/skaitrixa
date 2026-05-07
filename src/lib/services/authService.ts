@@ -50,3 +50,9 @@ export const onAuthChange = (callback: (session: Session | null) => void) => {
 
     return subscription;
 }
+
+export const updatePassword = async (password: string) => {
+    const {error} = await supabase.auth.updateUser({password: password});
+
+    if (error) throw error;
+}

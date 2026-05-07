@@ -37,6 +37,9 @@ const UsersPage = () => {
     const addTeacher = async (e: SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
 
+        setError("");
+        setSuccess("");
+
         try {
             if (formData) {
                 if (formData.school_id === -1) {

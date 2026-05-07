@@ -18,15 +18,27 @@ export const countUsers = async () => {
 
 export const createTeacher = async (input: CreateTeacherInput) => {
     const {data: {session}} = await supabase.auth.getSession();
-
-    const {data, error} = await supabase.functions.invoke("create-teacher", {
-        body: input,
-        headers: {
-            Authorization: `Bearer ${session?.access_token}`
+    // ---------- DEBUG ----------
+    console.log("session:", session);
+    console.log("token:", session?.access_token);
+    // ---------------------------
+    const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/create-teacher`,
+        {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${session!.access_token}`,
+                "Content-Type": "application/json",
+                "apikey": import.meta.env.VITE_SUPABASE_ANON_KEY,
+            },
+            body: JSON.stringify({...input, redirectTo: `${window.location.origin}/set-password`})
         }
-    });
+    );
 
-    if (error) throw error;
+    if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Failed to create teacher");
+    }
 
-    return data;
+    return response;
 }

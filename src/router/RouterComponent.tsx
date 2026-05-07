@@ -13,6 +13,7 @@ import AdminDashboard from "../features/admin/pages/AdminDashboard.tsx";
 import SchoolsPage from "../features/admin/pages/SchoolsPage.tsx";
 import ClassesPage from "../features/admin/pages/ClassesPage.tsx";
 import UsersPage from "../features/admin/pages/UsersPage.tsx";
+import SetPasswordPage from "../pages/SetPasswordPage.tsx";
 
 interface RouterProps {
     user: User | null;
@@ -103,6 +104,11 @@ const RouterComponent = ({user}: RouterProps) => {
                     <Route path="/profile" element={
                         <ProtectedRoute user={user} roles={["teacher", "student", "admin"]}>
                             <h1>Profils</h1>
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/set-password" element={
+                        <ProtectedRoute user={user} roles={["teacher", "student", "admin"]}>
+                            <SetPasswordPage />
                         </ProtectedRoute>
                     } />
                 </Route>

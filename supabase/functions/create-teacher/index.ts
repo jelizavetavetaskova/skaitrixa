@@ -17,7 +17,7 @@ const anonKey = Deno.env.get('SUPABASE_ANON_KEY')!
 
 Deno.serve(async (req) => {
     if (req.method === 'OPTIONS') return new Response('ok', {headers: corsHeaders})
-  const {email, name, surname, school_id} = await req.json();
+  const {email, name, surname, school_id, redirectTo} = await req.json();
   const authHeader = req.headers.get('Authorization');
   if (!authHeader) {
     return new Response(JSON.stringify({error: "Unauthorized"}), {status: 401, headers: corsHeaders});
@@ -44,7 +44,7 @@ Deno.serve(async (req) => {
 
   const adminClient = createClient(supabaseUrl, serviceRoleKey);
 
-  const {data: invited, error: inviteError} = await adminClient.auth.admin.inviteUserByEmail(email);
+  const {data: invited, error: inviteError} = await adminClient.auth.admin.inviteUserByEmail(email, {redirectTo});
 
   if (inviteError) {
     return new Response(JSON.stringify({error: inviteError.message}), {status: 400, headers: corsHeaders});
