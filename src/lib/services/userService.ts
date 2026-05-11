@@ -42,3 +42,12 @@ export const createTeacher = async (input: CreateTeacherInput) => {
 
     return response;
 }
+
+export const getAllUsers = async () => {
+    const {data, error} = await supabase.from("users")
+        .select("*, schools(name), classes!class_id(number, letter)");
+
+    if (error) throw error;
+
+    return data;
+}
