@@ -1,12 +1,18 @@
 import PageCard from "../../../shared/components/PageCard.tsx";
-import {createTeacher, type CreateTeacherInput, getAllUsers} from "../../../lib/services/userService.ts";
+import {
+    changeUserStatus,
+    createTeacher,
+    type CreateTeacherInput,
+    getAllUsers
+} from "../../../lib/services/userService.ts";
 import {type ChangeEvent, type SubmitEvent, useEffect, useState} from "react";
 import {getErrorMessage} from "../../../shared/utils/getErrorMessage.ts";
 import LabeledInput from "../../../shared/components/LabeledInput.tsx";
 import {getAllSchools} from "../../../lib/services/schoolService.ts";
 import type {School} from "../../../shared/types/database.ts";
 import Button from "../../../shared/components/Button.tsx";
-import {Trash} from "lucide-react";
+import {Lock, Unlock} from "lucide-react";
+import {useAuth} from "../../auth/hooks/useAuth.ts";
 
 export interface UserWithSchoolAndClass {
     user_id: string;
@@ -16,6 +22,7 @@ export interface UserWithSchoolAndClass {
     email: string;
     schools: {name: string} | null;
     classes: {number: number, letter: string} | null;
+    is_active: boolean;
 }
 
 const UsersPage = () => {
@@ -34,6 +41,8 @@ const UsersPage = () => {
     const [schools, setSchools] = useState<School[]>([]);
 
     const [show, setShow] = useState(false);
+
+    const {user} = useAuth();
 
     const loadUsers = async () => {
         try {
@@ -89,6 +98,20 @@ const UsersPage = () => {
             ...formData,
             [e.target.name]: e.target.value
         })
+    }
+
+    const changeStatus = async (id: string, status: boolean) => {
+        try {
+            let ans = true;
+            if (!status) ans = confirm("Vai tiešām vēlaties bloķēt šo lietotāju?");
+
+            if (ans) {
+                await changeUserStatus(id, status);
+                await loadUsers();
+            }
+        } catch (e) {
+            setError(getErrorMessage(e));
+        }
     }
 
     return (
@@ -166,16 +189,22 @@ const UsersPage = () => {
                     </tr>
                 </thead>
                 <tbody>
-                {users.map((user) => (
-                    <tr key={user.user_id}>
-                        <td className="w-3/12 py-2 px-3">{user.name} {user.surname}</td>
-                        <td className="w-3/12 py-2 px-3">{user.email}</td>
-                        <td className="w-1/12 py-2 px-3">{user.role}</td>
-                        <td className="w-4/12 py-2 px-3">{user.schools?.name} {user.classes?.number}{user.classes?.letter}</td>
+                {users.map((u) => (
+                    <tr key={u.user_id} className={`${!u.is_active && "bg-gray-200"}`}>
+                        <td className="w-3/12 py-2 px-3">{u.name} {u.surname}</td>
+                        <td className="w-3/12 py-2 px-3">{u.email}</td>
+                        <td className="w-1/12 py-2 px-3">{u.role}</td>
+                        <td className="w-4/12 py-2 px-3">{u.schools?.name} {u.classes?.number}{u.classes?.letter}</td>
                         <td className="w-1/12 py-2 px-3">
-                            <button onClick={() => {}} className="cursor-pointer"> {/* TODO delete */}
-                                <Trash />
-                            </button>
+                            {user!.user_id === u.user_id ? <></> :
+                                u.is_active ?
+                                <button onClick={() => changeStatus(u.user_id, false)} className="cursor-pointer">
+                                    <Lock />
+                                </button> :
+                                <button onClick={() => changeStatus(u.user_id, true)} className="cursor-pointer">
+                                    <Unlock />
+                                </button>
+                            }
                         </td>
                     </tr>
                 ))}

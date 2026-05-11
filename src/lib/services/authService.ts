@@ -1,5 +1,6 @@
 import {supabase} from "../supabase.ts";
 import type {Session} from "@supabase/supabase-js";
+import type {User} from "../../shared/types/database.ts";
 
 interface UserData {
     name: string,
@@ -8,8 +9,14 @@ interface UserData {
 }
 
 export const signIn = async (email: string, password: string) => {
-    const {error} = await supabase.auth.signInWithPassword({email, password});
+    const {data, error} = await supabase.auth.signInWithPassword({email, password});
     if (error) throw error;
+
+    const profile: User = await fetchUser(data.user.id);
+    if (!profile.is_active) {
+        await supabase.auth.signOut();
+        throw new Error("Lietotājs nav aktivēts");
+    }
 }
 
 export const signOut = async () => {

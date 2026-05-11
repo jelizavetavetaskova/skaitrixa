@@ -51,3 +51,14 @@ export const getAllUsers = async () => {
 
     return data;
 }
+
+export const changeUserStatus = async (id: string, status: boolean) => {
+    const {data, error} = await supabase.from("users")
+        .update({is_active: status})
+        .eq("user_id", id)
+        .select().single();
+
+    if (error) throw error;
+
+    return data;
+}
