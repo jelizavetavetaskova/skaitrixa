@@ -9,6 +9,10 @@ interface HomepageProps {
 }
 
 const HomePage = ({user}: HomepageProps) => {
+    let link: string;
+    if (user?.role === "admin") link = "/admin";
+    else if (user?.role === "teacher") link = "/teacher";
+    else link = "/dashboard";
 
     return (
         <PageCard title="SKAITRIXA - galvas treniņu platforma">
@@ -32,7 +36,7 @@ const HomePage = ({user}: HomepageProps) => {
 
             {user ?
                 <div className="mt-8 flex justify-center">
-                    <LinkButton to="/dashboard"  variant="primary">Turpināt</LinkButton>
+                    <LinkButton to={link}  variant="primary">Turpināt</LinkButton>
                 </div>
                 :
                 <div className="flex items-center justify-center gap-2 mx-auto mt-8">

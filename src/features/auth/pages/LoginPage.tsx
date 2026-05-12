@@ -4,7 +4,8 @@ import {Link, useNavigate} from "react-router-dom";
 import PageCard from "../../../shared/components/PageCard.tsx";
 import Button from "../../../shared/components/Button.tsx";
 import LabeledInput from "../../../shared/components/LabeledInput.tsx";
-import {signIn} from "../../../lib/services/authService.ts";
+import {signIn, signOut} from "../../../lib/services/authService.ts";
+import {getErrorMessage} from "../../../shared/utils/getErrorMessage.ts";
 
 const LoginPage = () => {
     const [email, setEmail] = useState("");
@@ -25,12 +26,11 @@ const LoginPage = () => {
     const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
 
+
         try {
             await signIn(email, password);
         } catch (e) {
-            if (e instanceof Error) {
-                setError(e.message)
-            }
+            setError(getErrorMessage(e));
         }
     }
 

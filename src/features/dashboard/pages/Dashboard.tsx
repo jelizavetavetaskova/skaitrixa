@@ -5,6 +5,7 @@ import InfoCard from "../components/InfoCard.tsx";
 import LinkButton from "../../../shared/components/LinkButton.tsx";
 import {getTrainingsByStudentId} from "../../../lib/services/trainingService.ts";
 import {getBestResult, getLastResult} from "../../../lib/services/resultService.ts";
+import {getErrorMessage} from "../../../shared/utils/getErrorMessage.ts";
 
 interface DashboardProps {
     user: User | null;
@@ -26,9 +27,7 @@ const Dashboard = ({user}: DashboardProps) => {
                 const data = await getTrainingsByStudentId(user.user_id);
                 setTests(data);
             } catch (e) {
-                if (e instanceof Error) {
-                    setError(e.message);
-                }
+                setError(getErrorMessage(e));
             }
         }
 
@@ -43,9 +42,7 @@ const Dashboard = ({user}: DashboardProps) => {
                 const data = await getBestResult(user.user_id);
                 setBestResult(data);
             } catch (e) {
-                if (e instanceof Error) {
-                    setError(e.message);
-                }
+                setError(getErrorMessage(e));
             }
         }
 
@@ -54,9 +51,7 @@ const Dashboard = ({user}: DashboardProps) => {
                 const data = await getLastResult(user.user_id);
                 setLastResult(data);
             } catch (e) {
-                if (e instanceof Error) {
-                    setError(e.message);
-                }
+                setError(getErrorMessage(e));
             }
         }
 

@@ -21,7 +21,8 @@ export type User = {
     role: "teacher" | "student" | "admin",
     school_id: number,
     class_id: number,
-    created_at: string
+    created_at: string,
+    is_active: boolean
 }
 
 export type Training = {

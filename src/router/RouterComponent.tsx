@@ -9,6 +9,11 @@ import GamePage from "../features/game/pages/GamePage.tsx";
 import ResultsPage from "../features/results/pages/ResultsPage.tsx";
 import HomePage from "../pages/HomePage.tsx";
 import Layout from "../shared/layouts/Layout.tsx";
+import AdminDashboard from "../features/admin/pages/AdminDashboard.tsx";
+import SchoolsPage from "../features/admin/pages/SchoolsPage.tsx";
+import ClassesPage from "../features/admin/pages/ClassesPage.tsx";
+import UsersPage from "../features/admin/pages/UsersPage.tsx";
+import SetPasswordPage from "../pages/SetPasswordPage.tsx";
 
 interface RouterProps {
     user: User | null;
@@ -73,14 +78,37 @@ const RouterComponent = ({user}: RouterProps) => {
                     {/* ADMIN */}
                     <Route path="/admin" element={
                         <ProtectedRoute user={user} roles={["admin"]}>
-                            <h1>Admin lapa</h1>
+                            <AdminDashboard />
                         </ProtectedRoute>
                     } />
+                    <Route path="/admin/schools" element={
+                        <ProtectedRoute user={user} roles={["admin"]}>
+                            <SchoolsPage />
+                        </ProtectedRoute>
+                    }
+                    />
+                    <Route path="/admin/classes" element={
+                        <ProtectedRoute user={user} roles={["admin"]}>
+                            <ClassesPage />
+                        </ProtectedRoute>
+                    }
+                    />
+                    <Route path="/admin/users" element={
+                        <ProtectedRoute user={user} roles={["admin"]}>
+                            <UsersPage />
+                        </ProtectedRoute>
+                    }
+                    />
 
                     {/* ielogotie lietotāji */}
                     <Route path="/profile" element={
                         <ProtectedRoute user={user} roles={["teacher", "student", "admin"]}>
                             <h1>Profils</h1>
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/set-password" element={
+                        <ProtectedRoute user={user} roles={["teacher", "student", "admin"]}>
+                            <SetPasswordPage />
                         </ProtectedRoute>
                     } />
                 </Route>

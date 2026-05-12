@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import type {User} from "../../../shared/types/database.ts";
-import {fetchUser, onAuthChange, signIn, signOut} from "../../../lib/services/authService.ts";
+import {fetchUser, onAuthChange, signOut} from "../../../lib/services/authService.ts";
 
 export const useAuth = () => {
     const [loading, setLoading] = useState(true);
