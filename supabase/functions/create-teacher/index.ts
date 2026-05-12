@@ -17,7 +17,7 @@ const anonKey = Deno.env.get('SUPABASE_ANON_KEY')!
 
 Deno.serve(async (req) => {
     if (req.method === 'OPTIONS') return new Response('ok', {headers: corsHeaders})
-  const {email, name, surname, school_id, redirectTo} = await req.json();
+  const {email, name, surname, school_id, role, redirectTo} = await req.json();
   const authHeader = req.headers.get('Authorization');
   if (!authHeader) {
     return new Response(JSON.stringify({error: "Unauthorized"}), {status: 401, headers: corsHeaders});
@@ -42,6 +42,14 @@ Deno.serve(async (req) => {
     return new Response(JSON.stringify({error: "Forbidden"}), {status: 403, headers: corsHeaders});
   }
 
+    if (role !== 'admin' && role !== 'teacher') {
+        return new Response(JSON.stringify({error: "Lomai jābūt vai teacher, vai admin"}), {status: 400, headers: corsHeaders});
+    }
+
+    if (role === 'teacher' && (school_id === null || school_id === -1)) {
+        return new Response(JSON.stringify({error: "Izvēlieties skolu!"}), {status: 400, headers: corsHeaders});
+    }
+
   const adminClient = createClient(supabaseUrl, serviceRoleKey);
 
   const {data: invited, error: inviteError} = await adminClient.auth.admin.inviteUserByEmail(email, {redirectTo});
@@ -50,15 +58,17 @@ Deno.serve(async (req) => {
     return new Response(JSON.stringify({error: inviteError.message}), {status: 400, headers: corsHeaders});
   }
 
+  const sch_id = role === 'admin' ? null : school_id;
+
   const {error: insertError} = await adminClient
       .from("users")
       .insert({
         user_id: invited.user.id,
-        email,
-        name,
-        surname,
-        role: 'teacher',
-        school_id
+        email: email,
+        name: name,
+        surname: surname,
+        role: role,
+        school_id: sch_id
       })
 
   if (insertError) {

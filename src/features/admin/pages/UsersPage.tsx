@@ -1,8 +1,8 @@
 import PageCard from "../../../shared/components/PageCard.tsx";
 import {
     changeUserStatus,
-    createTeacher,
-    type CreateTeacherInput,
+    createUser,
+    type CreateUserInput,
     getAllUsers
 } from "../../../lib/services/userService.ts";
 import {type ChangeEvent, type SubmitEvent, useEffect, useState} from "react";
@@ -28,11 +28,12 @@ export interface UserWithSchoolAndClass {
 const UsersPage = () => {
     const [users, setUsers] = useState<UserWithSchoolAndClass[]>([]);
 
-    const [formData, setFormData] = useState<CreateTeacherInput>({
+    const [formData, setFormData] = useState<CreateUserInput>({
         email: "",
         name: "",
         surname: "",
-        school_id: -1
+        school_id: -1,
+        role: "teacher"
     });
 
     const [error, setError] = useState("");
@@ -71,7 +72,7 @@ const UsersPage = () => {
         getUsers();
     }, []);
 
-    const addTeacher = async (e: SubmitEvent<HTMLFormElement>) => {
+    const addUser = async (e: SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         setError("");
@@ -79,14 +80,14 @@ const UsersPage = () => {
 
         try {
             if (formData) {
-                if (formData.school_id === -1) {
+                if (formData.role === "teacher" && formData.school_id === -1) {
                     setError("Izvēlieties skolu!");
                     return;
-                }
-                await createTeacher(formData);
-                setSuccess("Skolotājs pievienots!");
-                setFormData({ email: "", name: "", surname: "", school_id: -1 });
-                loadUsers();
+            }
+                await createUser(formData);
+                setSuccess("Lietotājs pievienots!");
+                setFormData({email: "", name: "", surname: "", school_id: -1, role: "teacher"});
+                await loadUsers();
             }
         } catch (e) {
             setError(getErrorMessage(e));
@@ -121,11 +122,11 @@ const UsersPage = () => {
 
             {!show &&
                 <Button variant="primary" type="button" onClick={() => setShow((prev) => !prev)}>
-                    Pievienot skolotāju
+                    Pievienot lietotāju
                 </Button>
             }
 
-            {show && <form onSubmit={addTeacher}>
+            {show && <form onSubmit={addUser}>
                 <LabeledInput
                     label="E-pasts"
                     value={formData.email}
@@ -151,6 +152,22 @@ const UsersPage = () => {
                 />
 
                 <div className="flex flex-col mx-auto justify-center items-center mb-4">
+                    <label htmlFor="role" className="text-lg mb-2">Loma</label>
+                    <select
+                        className="p-3 w-2/3 rounded border border-gray-300 outline-primary"
+                        name="role"
+                        id="role"
+                        value={formData.role}
+                        onChange={(e) =>
+                            setFormData({...formData, role: e.target.value as "admin" | "teacher"})}
+                    >
+                        <option value="admin">Administrators</option>
+                        <option value="teacher">Skolotājs</option>
+                    </select>
+                </div>
+
+                {formData.role === "teacher" &&
+                <div className="flex flex-col mx-auto justify-center items-center mb-4">
                     <label htmlFor="school" className="text-lg mb-2">Skola</label>
                     <select
                         className="p-3 w-2/3 rounded border border-gray-300 outline-primary"
@@ -165,6 +182,7 @@ const UsersPage = () => {
                         ))}
                     </select>
                 </div>
+                }
 
                 <div className="flex flex-row gap-3 justify-center items-center mb-4">
                     <Button type="submit" variant="primary">Pievienot</Button>

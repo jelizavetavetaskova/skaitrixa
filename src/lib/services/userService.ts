@@ -1,10 +1,11 @@
 import {supabase} from "../supabase.ts";
 
-export interface CreateTeacherInput {
+export interface CreateUserInput {
     email: string;
     name: string;
     surname: string;
     school_id: number;
+    role: "teacher" | "admin";
 }
 
 export const countUsers = async () => {
@@ -16,20 +17,17 @@ export const countUsers = async () => {
     return count;
 }
 
-export const createTeacher = async (input: CreateTeacherInput) => {
-    const {data: {session}} = await supabase.auth.getSession();
-    // ---------- DEBUG ----------
-    console.log("session:", session);
-    console.log("token:", session?.access_token);
-    // ---------------------------
-    const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/create-teacher`,
-        {
-            method: "POST",
-            headers: {
-                "Authorization": `Bearer ${session!.access_token}`,
-                "Content-Type": "application/json",
-                "apikey": import.meta.env.VITE_SUPABASE_ANON_KEY,
+export const createUser = async (input: CreateUserInput) => {
+                    const {data: {session}} = await supabase.auth.getSession();
+
+                    const response = await fetch(
+                        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/create-teacher`,
+                        {
+                            method: "POST",
+                            headers: {
+                                "Authorization": `Bearer ${session!.access_token}`,
+                                "Content-Type": "application/json",
+                                "apikey": import.meta.env.VITE_SUPABASE_ANON_KEY,
             },
             body: JSON.stringify({...input, redirectTo: `${window.location.origin}/set-password`})
         }
@@ -37,7 +35,7 @@ export const createTeacher = async (input: CreateTeacherInput) => {
 
     if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.error || "Failed to create teacher");
+        throw new Error(error.error || "Failed to create a user");
     }
 
     return response;
