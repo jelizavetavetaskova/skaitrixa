@@ -5,7 +5,9 @@ import type {User} from "../../shared/types/database.ts";
 interface UserData {
     name: string,
     surname: string,
-    email: string
+    email: string,
+    school_id: number;
+    class_id: number;
 }
 
 export const signIn = async (email: string, password: string) => {
@@ -36,7 +38,7 @@ export const fetchUser = async (id: string) => {
     return data;
 }
 
-export const createUserProfile = async (userId: string, {name, surname, email}: UserData) => {
+export const createUserProfile = async (userId: string, {name, surname, email, school_id, class_id}: UserData) => {
     const {error} = await supabase
         .from("users")
         .insert({
@@ -44,7 +46,9 @@ export const createUserProfile = async (userId: string, {name, surname, email}: 
             name: name,
             surname: surname,
             email: email,
-            role: "student"
+            role: "student",
+            school_id: school_id,
+            class_id: class_id
         });
 
     if (error) throw error;

@@ -21,6 +21,29 @@ export const getAllClasses = async () => {
     return data;
 }
 
+export const getClass = async (id: number) => {
+    const {data, error} = await supabase.from("classes")
+        .select("*, schools(name)")
+        .eq("class_id", id)
+        .single();
+
+    if (error) throw error;
+
+    return data;
+}
+
+export const getClassesBySchool = async (school_id: number) => {
+    const {data, error} = await supabase.from("classes")
+        .select("*, schools(name)")
+        .eq("school_id", school_id)
+        .order("number")
+        .order("letter");
+
+    if (error) throw error;
+
+    return data;
+}
+
 export const createClass = async (number: number, letter: string, schoolId: number) => {
     const {data, error} = await supabase.from("classes")
         .insert({number: number, letter: letter, school_id: schoolId})
