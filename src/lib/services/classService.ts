@@ -21,6 +21,17 @@ export const getAllClasses = async () => {
     return data;
 }
 
+export const getClass = async (id: number) => {
+    const {data, error} = await supabase.from("classes")
+        .select("*, schools(name)")
+        .eq("class_id", id)
+        .single();
+
+    if (error) throw error;
+
+    return data;
+}
+
 export const getClassesBySchool = async (school_id: number) => {
     const {data, error} = await supabase.from("classes")
         .select("*, schools(name)")
