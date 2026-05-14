@@ -10,7 +10,7 @@ interface UserProps {
 
 const ProtectedRoute = ({user, roles, children}: UserProps) => {
     if (user === null) return <Navigate to="/login" />
-    if (roles && !roles.includes(user.role)) return <Navigate to="/" />
+    if (roles && !roles.includes(user.role)) return <Navigate to="/access-denied" />
 
     return children;
 }

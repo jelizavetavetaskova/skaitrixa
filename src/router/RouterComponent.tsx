@@ -14,6 +14,8 @@ import SchoolsPage from "../features/admin/pages/SchoolsPage.tsx";
 import ClassesPage from "../features/admin/pages/ClassesPage.tsx";
 import UsersPage from "../features/admin/pages/UsersPage.tsx";
 import SetPasswordPage from "../pages/SetPasswordPage.tsx";
+import NotFoundPage from "../shared/pages/NotFoundPage.tsx";
+import AccessDeniedPage from "../shared/pages/AccessDeniedPage.tsx";
 
 interface RouterProps {
     user: User | null;
@@ -111,6 +113,9 @@ const RouterComponent = ({user}: RouterProps) => {
                             <SetPasswordPage />
                         </ProtectedRoute>
                     } />
+
+                    <Route path="*" element={<NotFoundPage />} />
+                    <Route path="/access-denied" element={<AccessDeniedPage />} />
                 </Route>
             </Routes>
         </BrowserRouter>
