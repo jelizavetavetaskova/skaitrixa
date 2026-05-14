@@ -4,8 +4,8 @@ import {Link} from "react-router-dom";
 const AccessDeniedPage = () => {
     return (
         <PageCard title="Pieeja liegta">
-            <p className="text-xl">Tev nav pieejas šai lapai!</p>
-            <Link to="/" className="text-primary">Atpakaļ uz sākumlapu</Link>
+            <p className="text-xl text-center mx-4">Tev nav pieejas šai lapai!</p>
+            <p className="w-full text-center"><Link to="/" className="text-primary">Atpakaļ uz sākumlapu</Link></p>
         </PageCard>
     )
 }
