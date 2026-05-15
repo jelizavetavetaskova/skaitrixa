@@ -1,11 +1,10 @@
-import {Link} from "react-router-dom";
-import type {User} from "../shared/types/database.ts";
 import PageCard from "../shared/components/PageCard.tsx";
 import Paragraph from "../shared/components/Paragraph.tsx";
 import LinkButton from "../shared/components/LinkButton.tsx";
+import type {UserWithSchoolAndClass} from "../shared/types/app.ts";
 
 interface HomepageProps {
-    user: User | null;
+    user: UserWithSchoolAndClass | null;
 }
 
 const HomePage = ({user}: HomepageProps) => {

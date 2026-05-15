@@ -1,4 +1,4 @@
-import type {Result, Training, User} from "../../../shared/types/database.ts";
+import type {Result, Training} from "../../../shared/types/database.ts";
 import {useEffect, useState} from "react";
 import PageCard from "../../../shared/components/PageCard.tsx";
 import InfoCard from "../components/InfoCard.tsx";
@@ -6,11 +6,10 @@ import LinkButton from "../../../shared/components/LinkButton.tsx";
 import {getTrainingsByStudentId} from "../../../lib/services/trainingService.ts";
 import {getBestResult, getLastResult} from "../../../lib/services/resultService.ts";
 import {getErrorMessage} from "../../../shared/utils/getErrorMessage.ts";
-import {getSchool} from "../../../lib/services/schoolService.ts";
-import {getClass} from "../../../lib/services/classService.ts";
+import type {UserWithSchoolAndClass} from "../../../shared/types/app.ts";
 
 interface DashboardProps {
-    user: User | null;
+    user: UserWithSchoolAndClass | null;
 }
 
 const Dashboard = ({user}: DashboardProps) => {
@@ -18,9 +17,6 @@ const Dashboard = ({user}: DashboardProps) => {
 
     const [bestResult, setBestResult] = useState<Result|null>(null);
     const [lastResult, setLastResult] = useState<Result|null>(null);
-
-    const [schoolName, setSchoolName] = useState("");
-    const [cls, setCls] = useState({number: 0, letter: ""});
 
     const [error, setError] = useState("");
 
@@ -60,23 +56,9 @@ const Dashboard = ({user}: DashboardProps) => {
             }
         }
 
-        const getSchoolAndClass = async () => {
-            try {
-                const school = await getSchool(user.school_id);
-                setSchoolName(school.name);
-                const clsData = await getClass(user.class_id);
-                setCls(clsData);
-            } catch (e) {
-                setError(getErrorMessage(e));
-            }
-        }
-
         getBest();
         getLast();
-        getSchoolAndClass();
     }, [user?.user_id, user?.class_id, user?.school_id]);
-
-
 
     return (
         <PageCard
@@ -84,7 +66,7 @@ const Dashboard = ({user}: DashboardProps) => {
         >
 
             <h3 className="text-2xl text-black font-semibold text-center">
-                {schoolName}, {cls.number}.{cls.letter} klase
+                {user?.schools?.name}, {user?.classes?.number}.{user?.classes?.letter} klase
             </h3>
 
             <div className="flex justify-center mt-5">
