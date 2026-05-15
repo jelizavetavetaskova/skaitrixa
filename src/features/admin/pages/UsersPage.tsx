@@ -13,17 +13,7 @@ import type {School} from "../../../shared/types/database.ts";
 import Button from "../../../shared/components/Button.tsx";
 import {Lock, Unlock} from "lucide-react";
 import {useAuth} from "../../auth/hooks/useAuth.ts";
-
-export interface UserWithSchoolAndClass {
-    user_id: string;
-    name: string;
-    surname: string;
-    role: string;
-    email: string;
-    schools: {name: string} | null;
-    classes: {number: number, letter: string} | null;
-    is_active: boolean;
-}
+import type {UserWithSchoolAndClass} from "../../../shared/types/app.ts";
 
 const UsersPage = () => {
     const [users, setUsers] = useState<UserWithSchoolAndClass[]>([]);

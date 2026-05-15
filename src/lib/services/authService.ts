@@ -33,7 +33,7 @@ export const signUp = async (email: string, password: string) => {
 }
 
 export const fetchUser = async (id: string) => {
-    const {data, error} = await supabase.from("users").select("*").eq("user_id", id).single();
+    const {data, error} = await supabase.from("users").select("*, schools(name), classes!class_id(number, letter)").eq("user_id", id).single();
     if (error) throw error;
     return data;
 }

@@ -51,8 +51,6 @@ const CreateTrainingPage = ({type, user}: CreateTrainingProps) => {
         }))
     }
 
-
-
     const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
         setError("");

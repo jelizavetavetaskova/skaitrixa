@@ -1,6 +1,5 @@
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute.tsx";
-import type {User} from "../shared/types/database.ts";
 import LoginPage from "../features/auth/pages/LoginPage.tsx";
 import RegisterPage from "../features/auth/pages/RegisterPage.tsx";
 import Dashboard from "../features/dashboard/pages/Dashboard.tsx";
@@ -16,9 +15,10 @@ import UsersPage from "../features/admin/pages/UsersPage.tsx";
 import SetPasswordPage from "../pages/SetPasswordPage.tsx";
 import NotFoundPage from "../shared/pages/NotFoundPage.tsx";
 import AccessDeniedPage from "../shared/pages/AccessDeniedPage.tsx";
+import type {UserWithSchoolAndClass} from "../shared/types/app.ts";
 
 interface RouterProps {
-    user: User | null;
+    user: UserWithSchoolAndClass | null;
 }
 
 const RouterComponent = ({user}: RouterProps) => {

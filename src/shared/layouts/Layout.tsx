@@ -1,11 +1,11 @@
 import {Outlet} from "react-router-dom";
-import type {User} from "../types/database.ts";
 import Navbar from "./Navbar.tsx";
 import OfflinePage from "../pages/OfflinePage.tsx";
 import {useEffect, useState} from "react";
+import type {UserWithSchoolAndClass} from "../types/app.ts";
 
 interface LayoutProps {
-    user: User | null;
+    user: UserWithSchoolAndClass | null;
 }
 
 const Layout = ({user}: LayoutProps) => {
@@ -26,7 +26,7 @@ const Layout = ({user}: LayoutProps) => {
 
     return (
         <>
-            <Navbar user={user}/>
+            <Navbar user={user} isOnline={isOnline}/>
             {isOnline ? <Outlet /> : <OfflinePage />}
         </>
     )
