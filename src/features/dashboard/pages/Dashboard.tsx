@@ -78,7 +78,7 @@ const Dashboard = ({user}: DashboardProps) => {
                     <ul>
                         {tests && tests.length > 0 ?
                             tests.map((test) => (
-                                <li key={test.training_id}>{test.title} | {test.status === "pending" ? "jauns" : "izpildīts"}</li>
+                                <li key={test.training_id}>{test.status === "pending" ? "jauns" : "izpildīts"}</li>
                             ))
                         :
                         <p>Nav pārbaudes darbu</p>}
