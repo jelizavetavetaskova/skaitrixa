@@ -25,15 +25,27 @@ export type User = {
     is_active: boolean
 }
 
+export type Test = {
+    test_id: number;
+    title: string;
+    level: "easy" | "medium" | "hard",
+    time: number,
+    operations: string[],
+    class_id: string,
+    teacher_id: string,
+    deadline: string;
+    created_at: string
+}
+
 export type Training = {
     training_id: number,
-    title: string,
     type: "training" | "test",
     level: "easy" | "medium" | "hard",
     time: number,
     operations: string[],
     student_id: string,
     teacher_id: string,
+    test_id: number | null;
     status: "pending" | "completed",
     created_at: string
 }
