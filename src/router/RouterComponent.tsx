@@ -16,6 +16,8 @@ import SetPasswordPage from "../pages/SetPasswordPage.tsx";
 import NotFoundPage from "../shared/pages/NotFoundPage.tsx";
 import AccessDeniedPage from "../shared/pages/AccessDeniedPage.tsx";
 import type {UserWithSchoolAndClass} from "../shared/types/app.ts";
+import TeacherPage from "../features/teacher/pages/TeacherPage.tsx";
+import CreateTestPage from "../features/teacher/pages/CreateTestPage.tsx";
 
 interface RouterProps {
     user: UserWithSchoolAndClass | null;
@@ -42,7 +44,7 @@ const RouterComponent = ({user}: RouterProps) => {
 
                     <Route path="/student/training/create" element={
                         <ProtectedRoute user={user} roles={["student"]}>
-                            <CreateTrainingPage user={user} type="training" />
+                            <CreateTrainingPage user={user} />
                         </ProtectedRoute>
                     } />
 
@@ -61,13 +63,13 @@ const RouterComponent = ({user}: RouterProps) => {
                     {/* SKOLOTĀJS */}
                     <Route path="/teacher" element={
                         <ProtectedRoute user={user} roles={["teacher"]}>
-                            <h1>Skolotāja lapa</h1>
+                            <TeacherPage user={user} />
                         </ProtectedRoute>
                     } />
 
                     <Route path="/teacher/test/create" element={
                         <ProtectedRoute user={user} roles={["teacher"]}>
-                            <h1>Izveidot kontroldarbu</h1>
+                            <CreateTestPage user={user} />
                         </ProtectedRoute>
                     } />
 

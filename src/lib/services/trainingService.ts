@@ -2,8 +2,7 @@ import {supabase} from "../supabase.ts";
 import type {Training} from "../../shared/types/database.ts";
 
 interface TrainingData {
-    title: string;
-    type: "training" | "test";
+     type: "training" | "test";
     level: "easy" | "medium" | "hard";
     time: number;
     operations: string[];
@@ -35,11 +34,13 @@ export const getTraining = async (id: number) => {
     return data;
 }
 
-export const getTrainingsByStudentId = async (id: string) => {
+export const getTestsByStudentId = async (id: string) => {
     const {data, error} = await supabase.from("trainings")
-        .select("*")
+        .select("*, tests(*)")
         .eq("student_id", id)
-        .eq("type", "test");
+        .eq("type", "test")
+        .eq("status", "pending")
+        .order("deadline", {foreignTable: "tests", ascending: true});
 
     if (error) throw error;
 
