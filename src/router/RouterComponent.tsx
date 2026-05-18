@@ -63,7 +63,7 @@ const RouterComponent = ({user}: RouterProps) => {
                     {/* SKOLOTĀJS */}
                     <Route path="/teacher" element={
                         <ProtectedRoute user={user} roles={["teacher"]}>
-                            <TeacherPage />
+                            <TeacherPage user={user} />
                         </ProtectedRoute>
                     } />
 

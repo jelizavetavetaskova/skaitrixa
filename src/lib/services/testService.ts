@@ -39,7 +39,7 @@ export const getTest = async (id: number) => {
 
 export const getTestsByTeacher = async (teacherId: string) => {
     const {data, error} = await supabase.from("tests")
-        .select("*")
+        .select("*, classes(*)")
         .eq("teacher_id", teacherId)
         .order("created_at", {ascending: false});
 
