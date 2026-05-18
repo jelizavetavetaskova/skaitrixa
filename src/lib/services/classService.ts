@@ -44,6 +44,18 @@ export const getClassesBySchool = async (school_id: number) => {
     return data;
 }
 
+export const getClassesByTeacher = async (teacher_id: string) => {
+    const {data, error} = await supabase.from("classes")
+        .select("*")
+        .eq("teacher_id", teacher_id)
+        .order("number")
+        .order("letter");
+
+    if (error) throw error;
+
+    return data;
+}
+
 export const createClass = async (number: number, letter: string, schoolId: number) => {
     const {data, error} = await supabase.from("classes")
         .insert({number: number, letter: letter, school_id: schoolId})

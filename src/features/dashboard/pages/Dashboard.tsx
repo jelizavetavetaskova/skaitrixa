@@ -1,31 +1,34 @@
-import type {Result, Training} from "../../../shared/types/database.ts";
+import type {Result} from "../../../shared/types/database.ts";
 import {useEffect, useState} from "react";
 import PageCard from "../../../shared/components/PageCard.tsx";
 import InfoCard from "../components/InfoCard.tsx";
 import LinkButton from "../../../shared/components/LinkButton.tsx";
-import {getTrainingsByStudentId} from "../../../lib/services/trainingService.ts";
+import {getTestsByStudentId} from "../../../lib/services/trainingService.ts";
 import {getBestResult, getLastResult} from "../../../lib/services/resultService.ts";
 import {getErrorMessage} from "../../../shared/utils/getErrorMessage.ts";
-import type {UserWithSchoolAndClass} from "../../../shared/types/app.ts";
+import type {TrainingWithTest, UserWithSchoolAndClass} from "../../../shared/types/app.ts";
+import {Link} from "react-router-dom";
 
 interface DashboardProps {
     user: UserWithSchoolAndClass | null;
 }
 
 const Dashboard = ({user}: DashboardProps) => {
-    const [tests, setTests] = useState<Training[]|null>([]);
+    const [tests, setTests] = useState<TrainingWithTest[]>([]);
 
     const [bestResult, setBestResult] = useState<Result|null>(null);
     const [lastResult, setLastResult] = useState<Result|null>(null);
 
     const [error, setError] = useState("");
 
+    const [now, setNow] = useState(() => Date.now());
+
     useEffect(() => {
         if (!user?.user_id) return;
 
         const getTests = async () => {
             try {
-                const data = await getTrainingsByStudentId(user.user_id);
+                const data = await getTestsByStudentId(user.user_id);
                 setTests(data);
             } catch (e) {
                 setError(getErrorMessage(e));
@@ -60,6 +63,11 @@ const Dashboard = ({user}: DashboardProps) => {
         getLast();
     }, [user?.user_id, user?.class_id, user?.school_id]);
 
+    useEffect(() => {
+        const interval = setInterval(() => setNow(Date.now()), 1000);
+        return () => clearInterval(interval);
+    }, []);
+
     return (
         <PageCard
             title={`Sveik${(user?.name.endsWith("a") || user?.name.endsWith("e")) ? "a" : "s"}, ${user?.name}!`}
@@ -76,10 +84,28 @@ const Dashboard = ({user}: DashboardProps) => {
             <div className="flex flex-col md:flex-row mt-7 items-center justify-center gap-5 md:mx-15 md:items-stretch">
                 <InfoCard title="Pārbaudes darbi">
                     <ul>
-                        {tests && tests.length > 0 ?
-                            tests.map((test) => (
-                                <li key={test.training_id}>{test.status === "pending" ? "jauns" : "izpildīts"}</li>
-                            ))
+                        {tests.length > 0 ?
+                            tests.map((test) => {
+                                const deadlineMs = new Date(test.tests.deadline).getTime();
+                                const hoursLeft = (deadlineMs - now) / (1000 * 60 * 60);
+
+                                return (
+                                    <li key={test.training_id} className="mb-3">
+                                        {hoursLeft < 0 ?
+                                            <span className="block text-lg border border-primary rounded py-2 px-3
+                                                text-gray-500 opacity-60 w-full">{test.tests.title} | Termiņš beidzies</span>
+                                            :
+                                            <Link
+                                                to={`/game/${test.training_id}`}
+                                                className={`block text-lg border border-primary rounded py-2 px-3 
+                                                hover:bg-purple-200 w-full ${hoursLeft < 24 ? "bg-red-200" : ""}`}
+                                            >
+                                                {test.tests.title} | {new Date(test.tests.deadline).toLocaleString('lv-LV', {dateStyle: "short", timeStyle: "short"})}
+                                            </Link>
+                                        }
+                                    </li>
+                                )
+                            })
                         :
                         <p>Nav pārbaudes darbu</p>}
                     </ul>

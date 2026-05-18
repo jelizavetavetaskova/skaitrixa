@@ -2,12 +2,10 @@ import {type ChangeEvent, type SubmitEvent, useState} from "react";
 import type {User} from "../../shared/types/database.ts";
 import {useNavigate} from "react-router-dom";
 import Button from "../../shared/components/Button.tsx";
-import LabeledInput from "../../shared/components/LabeledInput.tsx";
 import {createTraining} from "../../lib/services/trainingService.ts";
 import {getErrorMessage} from "../../shared/utils/getErrorMessage.ts";
 
 interface CreateTrainingProps {
-    type: "training" | "test";
     user: User | null;
 }
 
@@ -30,9 +28,8 @@ const operations = [
     {value: "/", label: "÷"}
 ]
 
-const CreateTrainingPage = ({type, user}: CreateTrainingProps) => {
-    const [formData, setFormData] = useState<{title: string, level: "easy" | "medium" | "hard", operations: string[], time: number}>({
-        title: "",
+const CreateTrainingPage = ({user}: CreateTrainingProps) => {
+    const [formData, setFormData] = useState<{level: "easy" | "medium" | "hard", operations: string[], time: number}>({
         level: "easy",
         operations: [],
         time: 30,
@@ -47,7 +44,7 @@ const CreateTrainingPage = ({type, user}: CreateTrainingProps) => {
 
         setFormData((prev) => ({
             ...prev,
-            [name]: name === "amountOfTasks" || name === "time"? Number(value) : value
+            [name]: name === "time"? Number(value) : value
         }))
     }
 
@@ -63,21 +60,11 @@ const CreateTrainingPage = ({type, user}: CreateTrainingProps) => {
         try {
             const data = await createTraining({
                 ...formData,
-                type: type,
-                teacher_id: user?.role === "teacher" ? user.user_id : null,
-                student_id: user?.role === "student" ? user.user_id : null,
+                type: "training",
+                student_id: user!.user_id,
             })
 
-            if (data.type === "test") {
-                setFormData({
-                    title: "",
-                    level: "easy",
-                    operations: [],
-                    time: 30,
-                });
-            }
-
-            if (data.type === "training") navigate(`/game/${data.training_id}`)
+            navigate(`/game/${data.training_id}`)
         } catch (e) {
             setError(getErrorMessage(e));
         }
@@ -97,9 +84,6 @@ const CreateTrainingPage = ({type, user}: CreateTrainingProps) => {
             <h1 className="text-3xl text-primary text-center font-bold mb-3">Izveidot treniņu</h1>
 
             <form onSubmit={handleSubmit}>
-
-                <LabeledInput label="Treniņa nosaukums:" value={formData.title} name="title" onChange={handleChange} required={false} placeholder="Treniņš"/>
-
                 <div className="flex flex-col mx-auto justify-center items-center mb-4">
                     <p className="text-lg mb-2">Līmenis:</p>
 
