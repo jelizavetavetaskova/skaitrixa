@@ -2,7 +2,7 @@ import {useNavigate, useParams} from "react-router-dom";
 import {useEffect, useRef, useState} from "react";
 import type {Training, User} from "../../../shared/types/database.ts";
 import type {GeneratedTask} from "../../../shared/types/app.ts";
-import {generateTask} from "../utils/generateTask.ts";
+import {calculateGameStats, checkAnswer, generateTask, type SavedAnswer} from "../utils/gameLogic.ts";
 import Timer from "../components/Timer.tsx";
 import Keyboard from "../components/Keyboard.tsx";
 import {Check, Pause, Play, X} from "lucide-react";
@@ -11,13 +11,6 @@ import {getTraining} from "../../../lib/services/trainingService.ts";
 import {createResult} from "../../../lib/services/resultService.ts";
 import {saveAnswers} from "../../../lib/services/answerService.ts";
 import {getErrorMessage} from "../../../shared/utils/getErrorMessage.ts";
-
-type SavedAnswer = {
-    answer: number;
-    isCorrect: boolean;
-    timeSpent: number;
-    taskId: number;
-}
 
 interface GameProps {
     user: User | null;
@@ -49,9 +42,13 @@ const GamePage = ({user}: GameProps) => {
     const navigate = useNavigate();
 
     const handleSubmit = async () => {
+        if (!currentTask) return;
+
         const taskId = await saveTask();
 
-        if (Number(answer) == currentTask?.correct) {
+        const isCorrect = checkAnswer(currentTask, answer);
+
+        if (isCorrect) {
             setText("correct")
             correctRef.current += 1;
             setCorrect((c)=> c + 1);
@@ -76,7 +73,7 @@ const GamePage = ({user}: GameProps) => {
 
         answersRef.current = [...answersRef.current, {
             answer: Number(answer),
-            isCorrect: Number(answer) === currentTask?.correct,
+            isCorrect: isCorrect,
             // eslint-disable-next-line react-hooks/purity
             timeSpent: (Date.now() - taskStart.current) / 1000,
             taskId: taskId,
@@ -107,22 +104,13 @@ const GamePage = ({user}: GameProps) => {
     }
 
     const endGame = async () => {
-        const total: number = correctRef.current + mistakesRef.current;
-        const accuracy = (correctRef.current / total) * 100;
-
-        const times: number[] = answersRef.current.map((a) => a.timeSpent);
-        let timeSum = 0;
-        for (let i = 0; i < times.length; i++) {
-            timeSum += times[i];
-        }
-
-        const average = timeSum / times.length;
+        const {score, averageTime, accuracy} = calculateGameStats(answersRef.current);
 
         try {
             const data = await createResult({
-                score: correctRef.current,
-                accuracy: Math.floor(accuracy),
-                averageTime: average,
+                score: score,
+                accuracy: Math.round(accuracy),
+                averageTime: averageTime,
                 trainingId: training?.training_id ?? null,
                 userId: user?.user_id ?? null
             })
