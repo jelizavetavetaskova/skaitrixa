@@ -48,8 +48,6 @@ const CreateTestPage = ({user}: CreateTestProps) => {
         deadline: ""
     })
 
-    console.log('user:', user)
-    
     const [classes, setClasses] = useState<Class[]>([]);
 
     const [error, setError] = useState("");
@@ -77,11 +75,6 @@ const CreateTestPage = ({user}: CreateTestProps) => {
 
         if (formData.class_id === -1) {
             setError("Izvēlieties klasi!");
-            return;
-        }
-
-        if (!formData.deadline) {
-            setError("Izvēlieties termiņu!");
             return;
         }
 
@@ -122,9 +115,7 @@ const CreateTestPage = ({user}: CreateTestProps) => {
 
         const getClasses = async () => {
             try {
-                console.log('Fetching classes for:', user.user_id);
                 const data = await getClassesByTeacher(user.user_id);
-                console.log('Got classes:', data);
                 setClasses(data);
             } catch (e) {
                 setError(getErrorMessage(e));
