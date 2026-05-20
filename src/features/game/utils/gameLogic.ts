@@ -32,7 +32,8 @@ export const generateTask = (level: string, operations: string[]): GeneratedTask
     }
     else if (operation === "*") correct = firstNum * secondNum;
     else if (operation === "/") {
-        correct = Math.floor(Math.random() * (max - min + 1)) + min;
+        const maxCorrect = Math.floor(max / secondNum);
+        correct = Math.floor(Math.random() * (maxCorrect - min + 1)) + min;
         firstNum = correct * secondNum;
     }
 
